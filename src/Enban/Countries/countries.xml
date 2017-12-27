@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<countries>
+  <!-- A -->
+  <country code="AD" name="Andorra" bban-structure="4!n4!n12!c" bban-length="20" bank-identifier="1-4" branch-identifier="5-8">
+      <example bban="00012030200359100100" iban-electronic="AD1200012030200359100100" iban-print="AD12 0001 2030 2003 5910 0100" />
+  </country>
+  <country code="AE" name="The United Arab Emirates" bban-structure="3!n16!n" bban-length="19">
+    <example bban="0331234567890123456" iban-electronic="AE070331234567890123456" iban-print="AE07 0331 2345 6789 0123 456" />
+  </country>
+  <country code="AL" name="Albania" bban-structure="8!n16!c" bban-length="24">
+    <example bban="212110090000000235698741" iban-electronic="AL47212110090000000235698741" iban-print="AL47 2121 1009 0000 0002 3569 8741" />
+  </country>
+  <country code="AT" name="Austria" bban-structure="5!n11!n" bban-length="16">
+    <example bban="1904300234573201" iban-electronic="AT611904300234573201" iban-print="AT61 1904 3002 3457 3201" />
+  </country>
+  <country code="AZ" name="Azerbaijan" bban-structure="4!a20!c" bban-length="24">
+    <example bban="" iban-electronic="AZ21NABZ00000000137010001944" iban-print="AZ21 NABZ 0000 0000 1370 1000 1944" />
+  </country>
+  <!-- B -->
+  <country code="BA" name="Bosnia and Herzegovina" bban-structure="3!n3!n8!n2!n" bban-length="16">
+    <example bban="1290079401028494" iban-electronic="BA391290079401028494" iban-print="BA39 1290 0794 0102 8494" />
+  </country>
+  <country code="BE" name="Belgium" bban-structure="3!n7!n2!n" bban-length="12">
+    <example bban="539007547034" iban-electronic="BE68539007547034" iban-print="BE68 5390 0754 7034" />
+  </country>
+  <country code="BG" name="Bulgaria" bban-structure="4!a4!n2!n8!c" bban-length="18">
+    <example bban="BNBG96611020345678" iban-electronic="BG80BNBG96611020345678" iban-print="BG80 BNBG 9661 1020 3456 78" />
+  </country>
+  <country code="BH" name="Bahrain" bban-structure="4!a14!c" bban-length="18">
+    <example bban="BMAG00001299123456" iban-electronic="BH67BMAG00001299123456" iban-print="BH67 BMAG 0000 1299 1234 56" />
+  </country>
+  <country code="BR" name="Brazil" bban-structure="8!n5!n10!n1!a1!c" bban-length="25">
+    <example bban="00360305000010009795493C1" iban-electronic="BR1800360305000010009795493C1" iban-print="BR18 0036 0305 0000 1000 9795 493C 1" />
+  </country>
+  <country code="BY" name="Republic of Belarus" bban-structure="4!c4!n16!c" bban-length="24">
+    <example bban="NBRB3600900000002Z00AB00" iban-electronic="BY13NBRB3600900000002Z00AB00" iban-print="BY13 NBRB 3600 9000 0000 2Z00 AB00" />
+  </country>
+  <!-- C -->
+  <country code="CH" name="Switzerland" bban-structure="5!n12!c" bban-length="17">
+    <example bban="00762011623852957" iban-electronic="CH9300762011623852957" iban-print="CH93 0076 2011 6238 5295 7" />
+  </country>
+  <country code="CR" name="Costa Rica" bban-structure="4!n14!n" bban-length="18">
+    <example bban="015202001026284066" iban-electronic="CR05015202001026284066" iban-print="CR05 0152 0200 1026 2840 66" />
+  </country>
+  <country code="CY" name="Cyprus" bban-structure="3!n5!n16!c" bban-length="24">
+    <example bban="002001280000001200527600" iban-electronic="CY17002001280000001200527600" iban-print="CY17 0020 0128 0000 0012 0052 7600" />
+  </country>
+  <country code="CZ" name="Czech Republic" bban-structure="4!n6!n10!n" bban-length="20">
+    <example bban="08000000192000145399" iban-electronic="CZ6508000000192000145399" iban-print="CZ65 0800 0000 1920 0014 5399" />
+  </country>
+  <!-- D -->
+  <country code="DE" name="Germany" bban-structure="8!n10!n" bban-length="18">
+    <example bban="370400440532013000" iban-electronic="DE89370400440532013000" iban-print="DE89 3704 0044 0532 0130 00" />
+  </country>
+  <country code="DK" name="Denmark" bban-structure="4!n9!n1!n" bban-length="14">
+    <example bban="00400440116243" iban-electronic="DK5000400440116243" iban-print="DK50 0040 0440 1162 43" />
+  </country>
+  <country code="DO" name="Dominican Republic" bban-structure="4!c20!n" bban-length="24">
+    <example bban="BAGR00000001212453611324" iban-electronic="DO28BAGR00000001212453611324" iban-print="DO28 BAGR 0000 0001 2124 5361 1324" />
+  </country>
+  <!-- E -->
+  <country code="EE" name="Estonia" bban-structure="2!n2!n11!n1!n" bban-length="16">
+    <example bban="2200221020145685" iban-electronic="EE382200221020145685" iban-print="EE38 2200 2210 2014 5685" />
+  </country>
+  <country code="ES" name="Spain" bban-structure="4!n4!n1!n1!n10!n" bban-length="20">
+    <example bban="21000418450200051332" iban-electronic="ES9121000418450200051332" iban-print="ES91 2100 0418 4502 0005 1332" />
+  </country>
+  <!-- F -->
+  <country code="FI" name="Finland" bban-structure="3!n11!n" bban-length="14">
+    <example bban="" iban-electronic="FI2112345600000785" iban-print="FI21 1234 5600 0007 85" />
+  </country>
+  <country code="FO" name="Faroe Islands" bban-structure="4!n9!n1!n" bban-length="14">
+    <example bban="64600001631634" iban-electronic="FO6264600001631634" iban-print="FO62 6460 0001 6316 34" />
+  </country>
+  <country code="FR" name="France" bban-structure="5!n5!n11!c2!n" bban-length="23">
+    <example bban="20041010050500013M02606" iban-electronic="FR1420041010050500013M02606" iban-print="FR14 2004 1010 0505 0001 3M02 606" />
+  </country>
+  <!-- G -->
+  <country code="GB" name="United Kingdom" bban-structure="4!a6!n8!n" bban-length="18">
+    <example bban="NWBK60161331926819" iban-electronic="GB29NWBK60161331926819" iban-print="GB29 NWBK 6016 1331 9268 19" />
+  </country>
+  <country code="GE" name="Georgia" bban-structure="2!a16!n" bban-length="18">
+    <example bban="NB0000000101904917" iban-electronic="GE29NB0000000101904917" iban-print="GE29 NB00 0000 0101 9049 17" />
+  </country>
+  <country code="GI" name="Gibraltar" bban-structure="4!a15!c" bban-length="19">
+    <example bban="NWBK000000007099453" iban-electronic="GI75NWBK000000007099453" iban-print="GI75 NWBK 0000 0000 7099 453" />
+  </country>
+  <country code="GL" name="Greenland" bban-structure="4!n9!n1!n" bban-length="14">
+    <example bban="64710001000206" iban-electronic="GL8964710001000206" iban-print="GL89 6471 0001 0002 06" />
+  </country>
+  <country code="GR" name="Greece" bban-structure="3!n4!n16!c" bban-length="23">
+    <example bban="01101250000000012300695" iban-electronic="GR1601101250000000012300695" iban-print="GR16 0110 1250 0000 0001 2300 695" />
+  </country>
+  <country code="GT" name="Guatemala" bban-structure="4!c20!c" bban-length="24">
+    <example bban="TRAJ01020000001210029690" iban-electronic="GT82TRAJ01020000001210029690" iban-print="GT82 TRAJ 0102 0000 0012 1002 9690" />
+  </country>
+  <!-- H -->
+  <country code="HR" name="Croatia" bban-structure="7!n10!n" bban-length="17">
+    <example bban="10010051863000160" iban-electronic="HR1210010051863000160" iban-print="HR12 1001 0051 8630 0016 0" />
+  </country>
+  <country code="HU" name="Hungary" bban-structure="3!n4!n1!n15!n1!n" bban-length="24">
+    <example bban="117730161111101800000000" iban-electronic="HU42117730161111101800000000" iban-print="HU42 1177 3016 1111 1018 0000 0000" />
+  </country>
+  <!-- I -->
+  <country code="IE" name="Ireland" bban-structure="4!a6!n8!n" bban-length="18">
+    <example bban="AIBK93115212345678" iban-electronic="IE29AIBK93115212345678" iban-print="IE29 AIBK 9311 5212 3456 78" />
+  </country>
+  <country code="IL" name="Israel" bban-structure="3!n3!n13!n" bban-length="19">
+    <example bban="0108000000099999999" iban-electronic="IL620108000000099999999" iban-print="IL62 0108 0000 0009 9999 999" />
+  </country>
+  <country code="IQ" name="Iraq" bban-structure="4!a3!n12!n" bban-length="19">
+    <example bban="NBIQ850123456789012" iban-electronic="IQ98NBIQ850123456789012" iban-print="IQ98 NBIQ 8501 2345 6789 012" />
+  </country>
+  <country code="IS" name="Iceland" bban-structure="4!n2!n6!n10!n" bban-length="22">
+    <example bban="0159260076545510730339" iban-electronic="IS140159260076545510730339" iban-print="IS14 0159 2600 7654 5510 7303 39" />
+  </country>
+  <country code="IT" name="Italy" bban-structure="1!a5!n5!n12!c" bban-length="23">
+    <example bban="X0542811101000000123456" iban-electronic="IT60X0542811101000000123456" iban-print="IT60 X054 2811 1010 0000 0123 456" />
+  </country>
+  <!-- J -->
+  <country code="JO" name="Jordan" bban-structure="4!a4!n18!c" bban-length="26">
+    <example bban="CBJO0010000000000131000302" iban-electronic="JO94CBJO0010000000000131000302" iban-print="JO94 CBJO 0010 0000 0000 0131 0003 02" />
+  </country>
+  <!-- K -->
+  <country code="KW" name="Kuwait" bban-structure="4!a22!c" bban-length="26">
+    <example bban="CBKU0000000000001234560101" iban-electronic="KW81CBKU0000000000001234560101" iban-print="KW81 CBKU 0000 0000 0000 1234 5601 01" />
+  </country>
+  <country code="KZ" name="Kazakhstan" bban-structure="3!n13!c" bban-length="16">
+    <example bban="125KZT5004100100" iban-electronic="KZ86125KZT5004100100" iban-print="KZ86 125K ZT50 0410 0100" />
+  </country>
+  <!-- L -->
+  <country code="LB" name="Lebanon" bban-structure="4!n20!c" bban-length="24">
+    <example bban="099900000001001901229114" iban-electronic="LB62099900000001001901229114" iban-print="LB62 0999 0000 0001 0019 0122 9114" />
+  </country>
+  <country code="LC" name="Saint Lucia" bban-structure="4!a24!c" bban-length="28">
+    <example bban="HEMM000100010012001200023015" iban-electronic="LC55HEMM000100010012001200023015" iban-print="LC55 HEMM 0001 0001 0012 0012 0002 3015" />
+  </country>
+  <country code="LI" name="Liechtenstein" bban-structure="5!n12!c" bban-length="17">
+    <example bban="088100002324013AA" iban-electronic="LI21088100002324013AA" iban-print="LI21 0881 0000 2324 013A A" />
+  </country>
+  <country code="LT" name="Lithuania" bban-structure="5!n11!n" bban-length="16">
+    <example bban="1000011101001000" iban-electronic="LT121000011101001000" iban-print="LT12 1000 0111 0100 1000" />
+  </country>
+  <country code="LU" name="Luxembourg" bban-structure="3!n13!c" bban-length="16">
+    <example bban="0019400644750000" iban-electronic="LU280019400644750000" iban-print="LU28 0019 4006 4475 0000" />
+  </country>
+  <country code="LV" name="Latvia" bban-structure="4!a13!c" bban-length="17">
+    <example bban="BANK0000435195001" iban-electronic="LV80BANK0000435195001" iban-print="LV80 BANK 0000 4351 9500 1" />
+  </country>
+  <!-- M -->
+  <country code="MC" name="Monaco" bban-structure="5!n5!n11!c2!n" bban-length="23">
+    <example bban="11222000010123456789030" iban-electronic="MC5811222000010123456789030" iban-print="MC58 1122 2000 0101 2345 6789 030" />
+  </country>
+  <country code="MD" name="Moldova" bban-structure="2!c18!c" bban-length="20">
+    <example bban="AG000225100013104168" iban-electronic="MD24AG000225100013104168" iban-print="MD24 AG00 0225 1000 1310 4168" />
+  </country>
+  <country code="ME" name="Montenegro" bban-structure="3!n13!n2!n" bban-length="18">
+    <example bban="505000012345678951" iban-electronic="ME25505000012345678951" iban-print="ME25 5050 0001 2345 6789 51" />
+  </country>
+  <country code="MK" name="Macedonia" bban-structure="3!n10!c2!n" bban-length="15">
+    <example bban="250120000058984" iban-electronic="MK07250120000058984" iban-print="MK07 2501 2000 0058 984" />
+  </country>
+  <country code="MR" name="Mauritania" bban-structure="5!n5!n11!n2!n" bban-length="23">
+    <example bban="00020001010000123456753" iban-electronic="MR1300020001010000123456753" iban-print="MR13 0002 0001 0100 0012 3456 753" />
+  </country>
+  <country code="MT" name="Malta" bban-structure="4!a5!n18!c" bban-length="27">
+    <example bban="MALT011000012345MTLCAST001S" iban-electronic="MT84MALT011000012345MTLCAST001S" iban-print="MT84 MALT 0110 0001 2345 MTLC AST0 01S" />
+  </country>
+  <country code="MU" name="Mauritius" bban-structure="4!a2!n2!n12!n3!n3!a" bban-length="26">
+    <example bban="BOMM0101101030300200000MUR" iban-electronic="MU17BOMM0101101030300200000MUR" iban-print="MU17 BOMM 0101 1010 3030 0200 000M UR" />
+  </country>
+  <!-- N -->
+  <country code="NL" name="The Netherlands" bban-structure="4!a10!n" bban-length="14">
+    <example bban="ABNA0417164300" iban-electronic="NL91ABNA0417164300" iban-print="NL91 ABNA 0417 1643 00" />
+  </country>
+  <country code="NO" name="Norway" bban-structure="4!n6!n1!n" bban-length="11">
+    <example bban="86011117947" iban-electronic="NO9386011117947" iban-print="NO93 8601 1117 947" />
+  </country>
+  <!-- P -->
+  <country code="PK" name="Pakistan" bban-structure="4!a16!c" bban-length="20">
+    <example bban="SCBL0000001123456702" iban-electronic="PK36SCBL0000001123456702" iban-print="PK36 SCBL 0000 0011 2345 6702" />
+  </country>
+  <country code="PL" name="Poland" bban-structure="8!n16!n" bban-length="24">
+    <example bban="109010140000071219812874" iban-electronic="PL61109010140000071219812874" iban-print="PL61 1090 1014 0000 0712 1981 2874" />
+  </country>
+  <country code="PS" name="State of Palestine" bban-structure="4!a21!c" bban-length="25">
+    <example bban="PALS000000000400123456702" iban-electronic="PS92PALS000000000400123456702" iban-print="PS92 PALS 0000 0000 0400 1234 5670 2" />
+  </country>
+  <country code="PT" name="Portugal" bban-structure="4!n4!n11!n2!n" bban-length="21">
+    <example bban="000201231234567890154" iban-electronic="PT50000201231234567890154" iban-print="PT50 0002 0123 1234 5678 9015 4" />
+  </country>
+  <!-- Q -->
+  <country code="QA" name="Qatar" bban-structure="4!a21!c" bban-length="25">
+    <example bban="DOHB00001234567890ABCDEFG" iban-electronic="QA58DOHB00001234567890ABCDEFG" iban-print="QA58 DOHB 0000 1234 5678 90AB CDEF G" />
+  </country>
+  <!-- R -->
+  <country code="RO" name="Romania" bban-structure="4!a16!c" bban-length="20">
+    <example bban="AAAA1B31007593840000" iban-electronic="RO49AAAA1B31007593840000" iban-print="RO49 AAAA 1B31 0075 9384 0000" />
+  </country>
+  <country code="RS" name="Serbia" bban-structure="3!n13!n2!n" bban-length="18">
+    <example bban="260005601001611379" iban-electronic="RS35260005601001611379" iban-print="RS35 2600 0560 1001 6113 79" />
+  </country>
+  <!-- S -->
+  <country code="SA" name="Saudi Arabia" bban-structure="2!n18!c" bban-length="20">
+    <example bban="80000000608010167519" iban-electronic="SA0380000000608010167519" iban-print="SA03 8000 0000 6080 1016 7519" />
+  </country>
+  <country code="SC" name="Seychelles" bban-structure="4!a2!n2!n16!n3!a" bban-length="27">
+    <example bban="SSCB11010000000000001497USD" iban-electronic="SC18SSCB11010000000000001497USD" iban-print="SC18 SSCB 1101 0000 0000 0000 1497 USD" />
+  </country>
+  <country code="SE" name="Sweden" bban-structure="3!n16!n1!n" bban-length="20">
+    <example bban="50000000058398257466" iban-electronic="SE4550000000058398257466" iban-print="SE45 5000 0000 0583 9825 7466" />
+  </country>
+  <country code="SI" name="Slovenia" bban-structure="5!n8!n2!n" bban-length="15">
+    <example bban="263300012039086" iban-electronic="SI56263300012039086" iban-print="SI56 2633 0001 2039 086" />
+  </country>
+  <country code="SK" name="Slovakia" bban-structure="4!n6!n10!n" bban-length="20">
+    <example bban="12000000198742637541" iban-electronic="SK3112000000198742637541" iban-print="SK31 1200 0000 1987 4263 7541" />
+  </country>
+  <country code="SM" name="San Marino" bban-structure="1!a5!n5!n12!c" bban-length="23">
+    <example bban="U0322509800000000270100" iban-electronic="SM86U0322509800000000270100" iban-print="SM86 U032 2509 8000 0000 0270 100" />
+  </country>
+  <country code="ST" name="Sao Tome and Principe" bban-structure="4!n4!n11!n2!n" bban-length="21">
+    <example bban="000200010192194210112" iban-electronic="ST32000200010192194210112" iban-print="ST32 0002 0001 0192 1942 1011 2" />
+  </country>
+  <country code="SV" name="El Salvador" bban-structure="4!a20!n" bban-length="24">
+    <example bban="CENR00000000000000700025" iban-electronic="SV62CENR00000000000000700025" iban-print="SV62 CENR 0000 0000 0000 0070 0025" />
+  </country>
+  <!-- T -->
+  <country code="TL" name="Timor-Leste" bban-structure="3!n14!n2!n" bban-length="19">
+    <example bban="0080012345678910157" iban-electronic="TL380080012345678910157" iban-print="TL38 0080 0123 4567 8910 157" />
+  </country>
+  <country code="TN" name="Tunisia" bban-structure="2!n3!n13!n2!n" bban-length="20">
+    <example bban="10006035183598478831" iban-electronic="TN5910006035183598478831" iban-print="TN59 1000 6035 1835 9847 8831" />
+  </country>
+  <country code="TR" name="Turkey" bban-structure="5!n1!n16!c" bban-length="22">
+    <example bban="0006100519786457841326" iban-electronic="TR330006100519786457841326" iban-print="TR33 0006 1005 1978 6457 8413 26" />
+  </country>
+  <!-- U -->
+  <country code="UA" name="Ukraine" bban-structure="6!n19!c" bban-length="25">
+    <example bban="3223130000026007233566001" iban-electronic="UA213223130000026007233566001" iban-print="UA21 3223 1300 0002 6007 2335 6600 1" />
+  </country>
+  <!-- V -->
+  <country code="VG" name="Virgin Islands" bban-structure="4!a16!n" bban-length="20">
+    <example bban="VPVG0000012345678901" iban-electronic="VG96VPVG0000012345678901" iban-print="VG96 VPVG 0000 0123 4567 8901" />
+  </country>
+  <!-- X -->
+  <country code="XK" name="Kosovo" bban-structure="4!n10!n2!n" bban-length="16">
+    <example bban="1212012345678906" iban-electronic="XK051212012345678906" iban-print="XK05 1212 0123 4567 8906" />
+  </country>
+  
+  <!--
+  <country code="" name="" bban-structure="" bban-length="">
+    <example bban="" iban-electronic="" iban-print="" />
+  </country>
+  -->
+</countries>

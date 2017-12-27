@@ -1,0 +1,106 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System.Collections.Generic;
+
+namespace Enban.Countries {
+
+	public class PregeneratedCountrySource : ICountrySource {
+	
+		private static readonly Dictionary<string, Country> CountriesByCode = new Dictionary<string, Country>();
+
+		static PregeneratedCountrySource() {
+<#			foreach(var entry in GetCountries()) { #>
+				CountriesByCode["<#= entry.GetAttribute("code") #>"] =  new Country(
+					"<#= entry.GetAttribute("code") #>",
+					"<#= entry.GetAttribute("name") #>",
+					// <#= entry.GetAttribute("bban-structure") #>
+					new Text.AccountNumberFormatInfo{StructureInfo = new Text.StructureInfo(0, new List<Text.Segment>{
+						<#	foreach(var segment in ParsePattern(entry.GetAttribute("bban-structure"))) { 
+							var cc = "Unknown";
+							if(segment.Item1=='n') {
+								cc = "Digits";
+							} else if(segment.Item1=='c') {
+								cc = "AlphanumericCharacters";
+							} else if(segment.Item1=='a') {
+								cc = "UpperCaseLetters";
+							} else if(segment.Item1=='e') {
+								cc = "BlankSpace";
+							}
+						#>
+							new Text.Segment(Text.CharacterClass.<#= cc #>, <#= segment.Item2 #>, Text.LengthIndication.<#= segment.Item3 ? "Fixed" : "Maximum" #>),
+						<#	} #>
+						}
+					)}
+				);
+<#			} #>
+		}
+
+		public IEnumerable<string> GetCodes() => CountriesByCode.Keys;
+
+		public Country ForCode(string code) {
+			Country c = null;
+			if(!string.IsNullOrWhiteSpace(code)) {
+				CountriesByCode.TryGetValue(code, out c);
+			}
+			return c;
+		}
+		
+	}
+}
+
+<#+
+
+	public List<System.Xml.XmlElement> GetCountries()
+    {
+        List<System.Xml.XmlElement> dict = new List<System.Xml.XmlElement>();
+        System.Xml.XmlDocument doc = new System.Xml.XmlDocument();
+        var path = System.IO.Path.GetFullPath(this.Host.ResolvePath("countries.xml"));
+        doc.Load(path);
+        var formatNodes = doc.SelectNodes("/countries/country")?.OfType<System.Xml.XmlElement>();
+
+        if (formatNodes != null)
+        {
+            foreach (System.Xml.XmlElement formatNode in formatNodes)
+            {
+				dict.Add(formatNode);
+            }
+        }
+        return dict;
+    }
+
+	public List<Tuple<char, int, bool>> ParsePattern(string patternText)
+        {
+            var pattern = new System.Text.RegularExpressions.Regex("((?<COUNT>[1-9][0-9]*!?)(?<CHAR>[nace]))+");
+            var match = pattern.Match(patternText);
+            if (match.Success)
+            {
+                var g = match.Groups["COUNT"];
+
+                var counts = (
+                    from System.Text.RegularExpressions.Capture capture in g.Captures
+                    let count = capture.Value
+                    let isFixed = count.EndsWith("!")
+                    let num = isFixed ? count.Substring(0, count.Length - 1) : count.Substring(0, count.Length)
+                    let parsedNum = int.Parse(num)
+                    select new Tuple<int, bool>(parsedNum, isFixed)
+                    ).ToList();
+
+                var chars = (
+                    from System.Text.RegularExpressions.Capture capture in match.Groups["CHAR"].Captures
+                    select capture.Value[0]
+                    ).ToList();
+
+                return counts.Zip(chars, (cnt, chr) => new Tuple<char, int, bool>(chr, cnt.Item1, cnt.Item2)).ToList();
+            }
+            else
+            {
+                return new List<Tuple<char, int, bool>>();
+            }
+        }
+
+#>
