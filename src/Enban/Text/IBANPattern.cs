@@ -31,7 +31,10 @@ namespace Enban.Text
 
         public string Format(IBAN value)
         {
-            throw new NotImplementedException();
+            var format = _type == IBANPatternType.Print ? "p" : "e";
+            
+            // TODO: move formatting code from IBAN to IBANPattern
+            return value.ToString(format, null);
         }
 
         private static readonly Regex GeneralPattern = new Regex("^(?<COUNTRY>[A-Z]{2})(?<CHECK>[0-9]{2})(?<ACCOUNT>.+)$");
