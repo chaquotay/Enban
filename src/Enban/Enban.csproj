@@ -69,6 +69,7 @@
     <Compile Include="Countries\ICountryProvider.cs" />
     <Compile Include="Countries\ICountrySource.cs" />
     <Compile Include="Countries\UnknownCountryException.cs" />
+    <Compile Include="CountryProviders.cs" />
     <Compile Include="Text\AccountNumberFormatInfo.cs" />
     <Compile Include="CheckDigit.cs" />
     <Compile Include="Countries\ListCountrySource.cs" />

@@ -12,9 +12,7 @@ namespace Enban.Test.Countries
         [MemberData(nameof(Countries))]
         public void ParseElectronicIBAN(Example example)
         {
-            var countries = new CountryProvider(new PregeneratedCountrySource());
-
-            var iban = IBANPattern.Electronic(countries).Parse(example.IBANElectronic);
+            var iban = IBANPattern.Electronic.Parse(example.IBANElectronic);
 
             Assert.True(iban.Success);
             Assert.Equal(example.BBAN, iban.Value.AccountNumber);
@@ -24,9 +22,7 @@ namespace Enban.Test.Countries
         [MemberData(nameof(Countries))]
         public void ParsePrintIBAN(Example example)
         {
-            var countries = new CountryProvider(new PregeneratedCountrySource());
-
-            var iban = IBANPattern.Print(countries).Parse(example.IBANPrint);
+            var iban = IBANPattern.Print.Parse(example.IBANPrint);
 
             Assert.True(iban.Success);
             Assert.Equal(example.BBAN, iban.Value.AccountNumber);
@@ -36,7 +32,7 @@ namespace Enban.Test.Countries
         [MemberData(nameof(Countries))]
         public void FormatElectronicIBAN(Example example)
         {
-            var countries = new CountryProvider(new PregeneratedCountrySource());
+            var countries = CountryProviders.Default;
 
             var ibanText = new BBAN(countries[example.CountryCode], example.BBAN).ToIBAN().ToString("e", null);
 
@@ -47,7 +43,7 @@ namespace Enban.Test.Countries
         [MemberData(nameof(Countries))]
         public void FormatPrintIBAN(Example example)
         {
-            var countries = new CountryProvider(new PregeneratedCountrySource());
+            var countries = CountryProviders.Default;
 
             var ibanText = new BBAN(countries[example.CountryCode], example.BBAN).ToIBAN().ToString("p", null);
 

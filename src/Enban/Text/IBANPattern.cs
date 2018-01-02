@@ -15,9 +15,13 @@ namespace Enban.Text
             return new IBANPattern(patternType, countryProvider);
         }
 
-        public static IBANPattern Electronic(ICountryProvider countryProvider) => Create(IBANPatternType.Electronic, countryProvider);
+        public static IBANPattern CreateElectronic(ICountryProvider countryProvider) => Create(IBANPatternType.Electronic, countryProvider);
 
-        public static IBANPattern Print(ICountryProvider countryProvider) => Create(IBANPatternType.Print, countryProvider);
+        public static IBANPattern Electronic { get; } = new IBANPattern(IBANPatternType.Electronic, CountryProviders.Default);
+
+        public static IBANPattern CreatePrint(ICountryProvider countryProvider) => Create(IBANPatternType.Print, countryProvider);
+
+        public static IBANPattern Print { get; } = new IBANPattern(IBANPatternType.Print, CountryProviders.Default);
 
         private IBANPattern(IBANPatternType type, ICountryProvider countryProvider)
         {

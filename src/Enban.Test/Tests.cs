@@ -7,18 +7,17 @@ namespace Enban.Test
     public class Tests
     {
         private Country Germany { get; }
-        private ICountryProvider CountryProvider { get; }
 
         public Tests()
         {
             Germany = new Country("DE", "Germany", null);
-            CountryProvider = new CountryProvider(new PregeneratedCountrySource());
+            
         }
 
         [Fact]
         public void TestMethodGI()
         {
-            var parsed = IBANPattern.Electronic(CountryProvider).Parse("GI75NWBK000000007099453");
+            var parsed = IBANPattern.Electronic.Parse("GI75NWBK000000007099453");
             Assert.True(parsed.Success);
             Assert.Equal("GI75 NWBK 0000 0000 7099 453", parsed.Value.ToString("p", null));
         }
@@ -26,7 +25,7 @@ namespace Enban.Test
         [Fact]
         public void TestMethodCZ()
         {
-            var parsed = IBANPattern.Electronic(CountryProvider).Parse("CZ6508000000192000145399");
+            var parsed = IBANPattern.Electronic.Parse("CZ6508000000192000145399");
             Assert.True(parsed.Success);
             Assert.Equal("CZ65 0800 0000 1920 0014 5399", parsed.Value.ToString("p", null));
         }
@@ -34,11 +33,11 @@ namespace Enban.Test
         [Fact]
         public void TestGermany()
         {
-            var parsed = IBANPattern.Electronic(CountryProvider).Parse("DE89370400440532013000");
+            var parsed = IBANPattern.Electronic.Parse("DE89370400440532013000");
             Assert.True(parsed.Success);
             Assert.Equal(new BBAN(Germany, "370400440532013000").ToIBAN(89), parsed.Value);
 
-            var notParsed = IBANPattern.Electronic(CountryProvider).Parse("DE89370400440532013000X");
+            var notParsed = IBANPattern.Electronic.Parse("DE89370400440532013000X");
             Assert.False(notParsed.Success);
         }
 
