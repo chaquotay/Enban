@@ -7,6 +7,12 @@ namespace Enban
         public Country Country { get; }
         public string AccountNumber { get; }
 
+        public BBAN(string countryCode, string bankAccountNumber)
+            : this(CountryProviders.Default[countryCode], bankAccountNumber)
+        {
+            
+        }
+
         public BBAN(Country country, string bankAccountNumber)
         {
             Country = country ?? throw new ArgumentNullException(nameof(country));
@@ -23,7 +29,7 @@ namespace Enban
             return ToIBAN(checkDigit);
         }
 
-        public IBAN ToIBAN(CheckDigit checkDigit)
+        public IBAN ToIBAN(int checkDigit)
         {
             return new IBAN(this, checkDigit);
         }

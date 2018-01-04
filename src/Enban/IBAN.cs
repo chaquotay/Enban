@@ -5,10 +5,10 @@ namespace Enban
 {
     public struct IBAN : IFormattable, IEquatable<IBAN>
     {
-        public CheckDigit CheckDigit { get; }
+        public int CheckDigit { get; }
         public BBAN BBAN { get; }
 
-        public IBAN(BBAN bankAccountNumber, CheckDigit checkDigit)
+        public IBAN(BBAN bankAccountNumber, int checkDigit)
         {
             CheckDigit = checkDigit;
             BBAN = bankAccountNumber;
@@ -16,7 +16,7 @@ namespace Enban
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            var x = Country.Code + CheckDigit.Value.ToString("00") + AccountNumber;
+            var x = Country.Code + CheckDigit.ToString("00") + AccountNumber;
             if ("e".Equals(format) || string.IsNullOrEmpty(format) || "G".Equals(format))
             {
                 // Electronic (no spaces)

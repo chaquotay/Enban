@@ -21,7 +21,7 @@ namespace Enban
             return rest.Equals(1);
         }
 
-        public CheckDigit Compute(string num)
+        public int Compute(string num)
         {
             var integer = ToNumber(num);
             var rest = integer % _mod;
