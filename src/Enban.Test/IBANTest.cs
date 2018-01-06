@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 
 namespace Enban.Test
@@ -18,6 +19,18 @@ namespace Enban.Test
             var iban = new BBAN("DE", "370400440532013000").ToIBAN(89);
 
             Assert.Equal("DE89370400440532013000", iban.ToString("e", null));
+        }
+
+        [Fact]
+        public void Construct_GivenCorrectFormat_ThenInstanceConstructed()
+        {
+            var iban = new IBAN("DE", "370400440532013000", 89);
+        }
+
+        [Fact]
+        public void Construct_GivenWrongFormat_ThenException()
+        {
+            Assert.Throws<ArgumentException>(() => new IBAN("DE", "X70400440532013000", 89));
         }
     }
 }

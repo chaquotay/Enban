@@ -8,6 +8,12 @@ namespace Enban
         public int CheckDigit { get; }
         public BBAN BBAN { get; }
 
+        public IBAN(string countryCode, string bankAccountNumber, int checkDigit)
+            : this(new BBAN(countryCode, bankAccountNumber), checkDigit)
+        {
+            
+        }
+
         public IBAN(BBAN bankAccountNumber, int checkDigit)
         {
             CheckDigit = checkDigit;

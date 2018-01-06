@@ -72,7 +72,7 @@ namespace Enban.Text
 
                 if (PatternConverter.IsMatch(account, segments))
                 {
-                    return ParseResult<IBAN>.ForSuccess(new IBAN(new BBAN(resolvedCountry, account), num));
+                    return ParseResult<IBAN>.ForSuccess(new IBAN(new BBAN(resolvedCountry, account, false), num));
                 }
                 else
                 {

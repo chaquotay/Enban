@@ -1,4 +1,5 @@
 using System;
+using Enban.Text;
 
 namespace Enban
 {
@@ -14,11 +15,29 @@ namespace Enban
         }
 
         public BBAN(Country country, string bankAccountNumber)
+            : this(country, bankAccountNumber, true)
+        {
+            
+        }
+
+        internal BBAN(Country country, string bankAccountNumber, bool validate)
         {
             Country = country ?? throw new ArgumentNullException(nameof(country));
 
-            if(string.IsNullOrEmpty(bankAccountNumber))
+            if (string.IsNullOrEmpty(bankAccountNumber))
                 throw new ArgumentException("null or empty", nameof(bankAccountNumber));
+
+            if (validate)
+            {
+                var segments = Country.AccountNumberFormatInfo?.StructureInfo?.Segments
+                    ?? throw new InvalidOperationException($"Cannot validate {nameof(BBAN)} without structural information about the account number of country {Country.Name}");
+
+                if (!PatternConverter.IsMatch(bankAccountNumber, segments))
+                {
+                    throw new ArgumentException($"Account number {bankAccountNumber} violates the pattern of account numbers of country {Country.Name}");
+                }
+
+            }
 
             AccountNumber = bankAccountNumber;
         }
