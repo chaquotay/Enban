@@ -16,11 +16,7 @@ if (parsed.Success && parsed.Value.CheckDigitValid)
 }
 ```
 
-prints
-
-```
-IBAN 'GI75 NWBK 0000 0000 7099 453' is valid!
-```
+prints `IBAN 'GI75 NWBK 0000 0000 7099 453' is valid!`
 
 ### Constructing an IBAN from a BBAN (with check digit)
 
@@ -31,9 +27,5 @@ var iban = new BBAN(germany, "210501700012345678").ToIBAN();
 Console.WriteLine($"IBAN with check digit (valid: {iban.CheckDigitValid}): " + IBANPattern.Print.Format(iban));
 ```
 
-prints
-
-```
-IBAN with check digit (valid: True): DE68 2105 0170 0012 3456 78
-```
+prints `IBAN with check digit (valid: True): DE68 2105 0170 0012 3456 78`
 
