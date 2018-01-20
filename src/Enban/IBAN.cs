@@ -1,5 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
+using Enban.Text;
 
 namespace Enban
 {
@@ -22,19 +23,18 @@ namespace Enban
 
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            var x = Country.Code + CheckDigit.ToString("00") + AccountNumber;
+            var pattern = IBANPattern.Electronic;
+
             if ("e".Equals(format) || string.IsNullOrEmpty(format) || "G".Equals(format))
             {
-                // Electronic (no spaces)
-                return x;
+                pattern = IBANPattern.Electronic;
             }
             else if ("p".Equals(format))
             {
-                // Print (with spaces after every forth character)
-                return Regex.Replace(x, ".{4}(?!$)", m => m.Value + " ");
+                pattern = IBANPattern.Print;
             }
 
-            return null;
+            return pattern.Format(this);
         }
 
         public override string ToString()

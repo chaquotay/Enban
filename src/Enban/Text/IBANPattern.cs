@@ -1,5 +1,8 @@
 using System;
+using System.CodeDom;
 using System.Globalization;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using Enban.Countries;
 
@@ -31,10 +34,40 @@ namespace Enban.Text
 
         public string Format(IBAN value)
         {
-            var format = _type == IBANPatternType.Print ? "p" : "e";
-            
-            // TODO: move formatting code from IBAN to IBANPattern
-            return value.ToString(format, null);
+            var electronic = value.Country.Code + value.CheckDigit.ToString("00") + value.AccountNumber;
+
+            if (_type == IBANPatternType.Print)
+            {
+                var electronicChars = electronic.ToCharArray();
+                var rest = electronic.Length % 4;
+                var fullSegmentCount = electronic.Length / 4;
+
+                var notLastSegmentCount = rest == 0 ? fullSegmentCount - 1 : fullSegmentCount;
+                var lastSegmentLength = rest == 0 ? 4 : rest;
+                var printLength = notLastSegmentCount * 5 + lastSegmentLength;
+                var printChars = new char[printLength];
+
+                var segmentIndex = 0;
+                while (segmentIndex < notLastSegmentCount)
+                {
+                    var electronicPosition = segmentIndex << 2;
+                    var printPosition = electronicPosition + segmentIndex;
+                    Array.Copy(electronicChars, electronicPosition, printChars, printPosition, 4);
+                    var spacePosition = printPosition + 4;
+                    printChars[spacePosition] = ' ';
+                    segmentIndex++;
+                }
+
+                var lastElectronicPosition = segmentIndex << 2;
+                var lastPrintPosition = lastElectronicPosition + segmentIndex;
+                Array.Copy(electronicChars, lastElectronicPosition, printChars, lastPrintPosition, lastSegmentLength);
+
+                return new string(printChars);
+            }
+            else
+            {
+                return electronic;
+            }
         }
 
         private static readonly Regex GeneralPattern = new Regex("^(?<COUNTRY>[A-Z]{2})(?<CHECK>[0-9]{2})(?<ACCOUNT>.+)$");
