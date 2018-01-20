@@ -40,5 +40,19 @@ namespace Enban.Test
         {
             Assert.Throws<ArgumentException>(() => new IBAN("DE", "X70400440532013000", 89));
         }
+
+        [Fact]
+        public void CheckDigitValid_GivenCorrectCheckDigit_ThenTrue()
+        {
+            var iban = new BBAN("DE", "210501700012345678").ToIBAN(68);
+            Assert.True(iban.CheckDigitValid);
+        }
+
+        [Fact]
+        public void CheckDigitValid_GivenWrongCheckDigit_ThenFalse()
+        {
+            var iban = new BBAN("DE", "210501709012345678").ToIBAN(68);
+            Assert.False(iban.CheckDigitValid);
+        }
     }
 }
