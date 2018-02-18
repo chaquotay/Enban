@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Enban</id>
+    <version>0.1.0-alpha</version>
+    <authors>Stephan Müller</authors>
+    <owners>Stephan Müller</owners>
+    <licenseUrl>https://raw.githubusercontent.com/chaquotay/Enban/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/chaquotay/Enban</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Enban is an IBAN/BBAN API for .NET, including parsing, validation and formatting.</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags>iban banking enban</tags>
+  </metadata>
+</package>

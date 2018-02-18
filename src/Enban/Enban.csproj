@@ -98,6 +98,7 @@
     <Compile Include="Text\ParseResult.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Enban.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
