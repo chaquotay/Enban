@@ -2,6 +2,10 @@ using System;
 
 namespace Enban.Text
 {
+    /// <summary>
+    /// The result of <see cref="IPattern{T}.Parse"/>, for both success and failure.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed class ParseResult<T>
     {
         private readonly Exception _exception;
@@ -14,8 +18,15 @@ namespace Enban.Text
             Success = success;
         }
 
+        /// <summary>
+        /// Indicated that the parse operation was successful.
+        /// </summary>
         public bool Success { get; }
 
+        /// <summary>
+        /// The failure reason in form of an <see cref="System.Exception"/> in case
+        /// the parse operation was not successful.
+        /// </summary>
         public Exception Exception
         {
             get
@@ -27,8 +38,17 @@ namespace Enban.Text
             }
         }
 
+        /// <summary>
+        /// Returns the successfully parsed value or throws an exception (<see cref="Exception"/>)
+        /// in case the parse operation was not successful.
+        /// </summary>
         public T Value => GetValueOrThrow();
 
+        /// <summary>
+        /// Returns the successfully parsed value or throws an exception (<see cref="Exception"/>)
+        /// in case the parse operation was not successful.
+        /// <returns>the parsed value</returns>
+        /// </summary>
         public T GetValueOrThrow()
         {
             if (Success)
@@ -37,6 +57,12 @@ namespace Enban.Text
             throw new Exception("Parse failure", _exception);
         }
 
+        /// <summary>
+        /// Tries to retrieve the parse result value
+        /// </summary>
+        /// <param name="failureValue">the value assigned to "result" in case the parse operation failed</param>
+        /// <param name="result">the parsed value or "failureValue" in case the parse operation failed</param>
+        /// <returns>whether the parse operation was successful; if true, then "failureValue" contains "Value", otherwise it contains the "failureValue"</returns>
         public bool TryGetValue(T failureValue, out T result)
         {
             result = Success ? _value : failureValue;

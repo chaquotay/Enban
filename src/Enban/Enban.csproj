@@ -26,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Debug\Enban.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -68,8 +69,10 @@
     <Compile Include="Countries\CountryProvider.cs" />
     <Compile Include="Countries\ICountryProvider.cs" />
     <Compile Include="Countries\ICountrySource.cs" />
+    <Compile Include="Countries\NamespaceDoc.cs" />
     <Compile Include="Countries\UnknownCountryException.cs" />
     <Compile Include="CountryProviders.cs" />
+    <Compile Include="NamespaceDoc.cs" />
     <Compile Include="Text\AccountNumberFormatInfo.cs" />
     <Compile Include="Countries\ListCountrySource.cs" />
     <Compile Include="Country.cs" />
@@ -81,6 +84,7 @@
     <Compile Include="Text\CharacterClass.cs" />
     <Compile Include="Text\IBANPatternType.cs" />
     <Compile Include="Text\LengthIndication.cs" />
+    <Compile Include="Text\NamespaceDoc.cs" />
     <Compile Include="Text\Segment.cs" />
     <Compile Include="Text\StructureInfo.cs" />
     <Compile Include="Text\BBANPattern.cs" />

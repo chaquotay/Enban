@@ -5,22 +5,47 @@ using Enban.Countries;
 
 namespace Enban.Text
 {
+    /// <summary>
+    /// Implements the IBAN patterns, both <see cref="Electronic">electronic</see> and <see cref="Print">print</see>.
+    /// </summary>
     public sealed class IBANPattern : IPattern<IBAN>
     {
         private readonly IBANPatternType _type;
         private readonly ICountryProvider _countryProvider;
 
+        /// <summary>
+        /// Creates a pattern instance (print or electronic), using the provided <see cref="ICountryProvider"/>.
+        /// </summary>
+        /// <param name="patternType">the pattern variant (<see cref="IBANPatternType.Electronic"/> or <see cref="IBANPatternType.Print"/>)</param>
+        /// <param name="countryProvider">a country provider</param>
+        /// <returns>the constructed pattern instance</returns>
         public static IBANPattern Create(IBANPatternType patternType, ICountryProvider countryProvider)
         {
             return new IBANPattern(patternType, countryProvider);
         }
 
+        /// <summary>
+        /// Creates an electronic pattern instance, using the provided <see cref="ICountryProvider"/>.
+        /// </summary>
+        /// <param name="countryProvider">a country provider</param>
+        /// <returns>the constructed pattern instance</returns>
         public static IBANPattern CreateElectronic(ICountryProvider countryProvider) => Create(IBANPatternType.Electronic, countryProvider);
 
+        /// <summary>
+        /// Provides an electronic pattern instance, using the <see cref="CountryProviders.Default">default country provider</see>.
+        /// </summary>
         public static IBANPattern Electronic { get; } = new IBANPattern(IBANPatternType.Electronic, CountryProviders.Default);
 
+        /// <summary>
+        /// Creates a print pattern instance, using the provided <see cref="ICountryProvider"/>.
+        /// </summary>
+        /// <param name="countryProvider">a country provider</param>
+        /// <returns>the constructed pattern instance</returns>
         public static IBANPattern CreatePrint(ICountryProvider countryProvider) => Create(IBANPatternType.Print, countryProvider);
 
+        /// <summary>
+        /// Provides a print pattern instance, using the <see cref="CountryProviders.Default">default country provider</see>.
+        /// </summary>
         public static IBANPattern Print { get; } = new IBANPattern(IBANPatternType.Print, CountryProviders.Default);
 
         private IBANPattern(IBANPatternType type, ICountryProvider countryProvider)
@@ -29,6 +54,7 @@ namespace Enban.Text
             _countryProvider = countryProvider;
         }
 
+        /// <inheritdoc />
         public string Format(IBAN value)
         {
             var electronic = value.Country.Code + value.CheckDigit.ToString("00") + value.AccountNumber;
@@ -69,6 +95,7 @@ namespace Enban.Text
 
         private static readonly Regex GeneralPattern = new Regex("^(?<COUNTRY>[A-Z]{2})(?<CHECK>[0-9]{2})(?<ACCOUNT>.+)$");
 
+        /// <inheritdoc />
         public ParseResult<IBAN> Parse(string text)
         {
             if (text == null)

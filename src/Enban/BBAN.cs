@@ -3,17 +3,41 @@ using Enban.Text;
 
 namespace Enban
 {
+    /// <summary>
+    /// Basis Bank Account Number (or short: BBAN), consisting of a country and a bank account number, which
+    /// adheres to the country's account number structure.
+    /// </summary>
     public struct BBAN : IEquatable<BBAN>
     {
+        /// <summary>
+        /// The country associated with this BBAN.
+        /// </summary>
         public Country Country { get; }
+        
+        /// <summary>
+        /// The bank account number of this BBAN.
+        /// </summary>
         public string AccountNumber { get; }
 
+        /// <summary>
+        /// Constructs a BBAN, given an ISO 3166-1 alpha-2 code and a bank account number, which is validated
+        /// according to the country's account number structure.
+        /// The country code is resolved using the <see cref="CountryProviders.Default">default country provider</see>.
+        /// </summary>
+        /// <param name="countryCode">the country's ISO 3166-1 alpha-2 code</param>
+        /// <param name="bankAccountNumber">the actual bank account number</param>
         public BBAN(string countryCode, string bankAccountNumber)
             : this(CountryProviders.Default[countryCode], bankAccountNumber)
         {
             
         }
 
+        /// <summary>
+        /// Constructs a BBAN, given a country and a bank account number, which is validated
+        /// according to the country's account number structure.
+        /// </summary>
+        /// <param name="country">the country</param>
+        /// <param name="bankAccountNumber">the actual bank account number</param>
         public BBAN(Country country, string bankAccountNumber)
             : this(country, bankAccountNumber, true)
         {
@@ -42,30 +66,45 @@ namespace Enban
             AccountNumber = bankAccountNumber;
         }
 
+        /// <summary>
+        /// Constructs an <see cref="IBAN"/> for this BBAN (country and account number),
+        /// suplemented by a valid check digit (according to ISO/IEC 7064 (MOD97-10)).
+        /// </summary>
+        /// <returns>the constructed IBAN</returns>
         public IBAN ToIBAN()
         {
             var checkDigit = CheckDigitUtil.Compute(Country.Code, AccountNumber);
             return ToIBAN(checkDigit);
         }
 
+        /// <summary>
+        /// Constructs an <see cref="IBAN"/> for this BBAN (country and account number),
+        /// using a provided check digit (which can be invalid according to ISO/IEC 7064 (MOD97-10)).
+        /// </summary>
+        /// <param name="checkDigit">a check digit</param>
+        /// <returns>the constructed IBAN</returns>
         public IBAN ToIBAN(int checkDigit)
         {
             return new IBAN(this, checkDigit);
         }
 
+        /// <inheritdoc />
         public override string ToString() => AccountNumber;
 
+        /// <inheritdoc />
         public bool Equals(BBAN other)
         {
             return Equals(Country.Code, other.Country.Code) && string.Equals(AccountNumber, other.AccountNumber);
         }
 
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             return obj is BBAN && Equals((BBAN) obj);
         }
 
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             unchecked
