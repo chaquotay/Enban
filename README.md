@@ -29,3 +29,7 @@ Console.WriteLine($"IBAN with check digit (valid: {iban.CheckDigitValid}): " + I
 
 prints `IBAN with check digit (valid: True): DE68 2105 0170 0012 3456 78`
 
+
+## NuGet
+
+Enban is [available on NuGet](https://www.nuget.org/packages/Enban).
