@@ -12,7 +12,7 @@ namespace Enban
         /// The check digit of the IBAN. The check digit might be wrong, e.g. if it was constructed by
         /// <see cref="IBANPattern.Parse">parsing an IBAN string</see> with an invalid check digit.
         /// 
-        /// In order to verify the validity of the check digit retrieve the valid of <see cref="CheckDigitValid"/>.
+        /// In order to verify the validity of the check digit retrieve the value of <see cref="CheckDigitValid"/>.
         /// </summary>
         public int CheckDigit { get; }
 
