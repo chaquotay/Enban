@@ -21,7 +21,7 @@ namespace Enban.Test {
             var Console = new System.IO.StringWriter();
 
             <#= entry.Item1.Replace("\r\n", "\r\n            ") #>
-			Assert.Equal("<#= entry.Item2 #>\r\n", Console.ToString());
+            Assert.Equal("<#= entry.Item2 #>\r\n", Console.ToString());
         }
 
 <#			} #>

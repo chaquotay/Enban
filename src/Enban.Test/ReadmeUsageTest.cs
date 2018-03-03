@@ -19,7 +19,7 @@ namespace Enban.Test {
                 Console.WriteLine($"IBAN '{parsed.Value:p}' is valid!");
             }
             
-			Assert.Equal("IBAN 'GI75 NWBK 0000 0000 7099 453' is valid!\r\n", Console.ToString());
+            Assert.Equal("IBAN 'GI75 NWBK 0000 0000 7099 453' is valid!\r\n", Console.ToString());
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace Enban.Test {
             
             Console.WriteLine($"IBAN with check digit (valid: {iban.CheckDigitValid}): " + IBANPattern.Print.Format(iban));
             
-			Assert.Equal("IBAN with check digit (valid: True): DE68 2105 0170 0012 3456 78\r\n", Console.ToString());
+            Assert.Equal("IBAN with check digit (valid: True): DE68 2105 0170 0012 3456 78\r\n", Console.ToString());
         }
 
     }
