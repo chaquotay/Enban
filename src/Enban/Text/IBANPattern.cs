@@ -1,6 +1,4 @@
 using System;
-using System.Globalization;
-using System.Text.RegularExpressions;
 using Enban.Countries;
 
 namespace Enban.Text
@@ -57,13 +55,26 @@ namespace Enban.Text
         /// <inheritdoc />
         public string Format(IBAN value)
         {
-            var electronic = value.Country.Code + value.CheckDigit.ToString("00") + value.AccountNumber;
+            var country = value.Country;
+            var accountNumber = value.AccountNumber;
+            var countryCode = country.Code;
+            var checkDigit = value.CheckDigit;
+
+            var electronicChars = new char[accountNumber.Length + 4];
+            electronicChars[0] = countryCode[0];
+            electronicChars[1] = countryCode[1];
+
+            var lastCheckDigit = checkDigit % 10;
+            var firstCheckDigit = (checkDigit - lastCheckDigit) / 10;
+            electronicChars[2] = (char) ('0' + firstCheckDigit);
+            electronicChars[3] = (char) ('0' + lastCheckDigit);
+
+            accountNumber.CopyTo(0, electronicChars, 4, accountNumber.Length);
 
             if (_type == IBANPatternType.Print)
             {
-                var electronicChars = electronic.ToCharArray();
-                var rest = electronic.Length % 4;
-                var fullSegmentCount = electronic.Length / 4;
+                var rest = electronicChars.Length % 4;
+                var fullSegmentCount = electronicChars.Length / 4;
 
                 var notLastSegmentCount = rest == 0 ? fullSegmentCount - 1 : fullSegmentCount;
                 var lastSegmentLength = rest == 0 ? 4 : rest;
@@ -75,7 +86,12 @@ namespace Enban.Text
                 {
                     var electronicPosition = segmentIndex << 2;
                     var printPosition = electronicPosition + segmentIndex;
-                    Array.Copy(electronicChars, electronicPosition, printChars, printPosition, 4);
+
+                    printChars[printPosition + 0] = electronicChars[electronicPosition + 0];
+                    printChars[printPosition + 1] = electronicChars[electronicPosition + 1];
+                    printChars[printPosition + 2] = electronicChars[electronicPosition + 2];
+                    printChars[printPosition + 3] = electronicChars[electronicPosition + 3];
+
                     var spacePosition = printPosition + 4;
                     printChars[spacePosition] = ' ';
                     segmentIndex++;
@@ -83,17 +99,23 @@ namespace Enban.Text
 
                 var lastElectronicPosition = segmentIndex << 2;
                 var lastPrintPosition = lastElectronicPosition + segmentIndex;
-                Array.Copy(electronicChars, lastElectronicPosition, printChars, lastPrintPosition, lastSegmentLength);
+
+                if (lastPrintPosition + 0 >= 0 && printChars.Length > lastPrintPosition + 0)
+                    printChars[lastPrintPosition + 0] = electronicChars[lastElectronicPosition + 0];
+                if (lastPrintPosition + 1 >= 0 && printChars.Length > lastPrintPosition + 1)
+                    printChars[lastPrintPosition + 1] = electronicChars[lastElectronicPosition + 1];
+                if (lastPrintPosition + 2 >= 0 && printChars.Length > lastPrintPosition + 2)
+                    printChars[lastPrintPosition + 2] = electronicChars[lastElectronicPosition + 2];
+                if (lastPrintPosition + 3 >= 0 && printChars.Length > lastPrintPosition + 3)
+                    printChars[lastPrintPosition + 3] = electronicChars[lastElectronicPosition + 3];
 
                 return new string(printChars);
             }
             else
             {
-                return electronic;
+                return new string(electronicChars);
             }
         }
-
-        private static readonly Regex GeneralPattern = new Regex("^(?<COUNTRY>[A-Z]{2})(?<CHECK>[0-9]{2})(?<ACCOUNT>.+)$");
 
         /// <inheritdoc />
         public ParseResult<IBAN> Parse(string text)
@@ -101,34 +123,36 @@ namespace Enban.Text
             if (text == null)
                 return ParseResult<IBAN>.ForFailure(null);
 
+            var chars = text.ToCharArray();
             if (_type == IBANPatternType.Print)
             {
-                // Remove whitespace
-                text = Regex.Replace(text, "\\s+", "");
+                chars = chars.RemoveWhitespaces();
             }
 
-            var match = GeneralPattern.Match(text);
-            if (match.Success)
+            var matchSuccess = chars.Length > 4 
+                                && chars[0]>='A' && chars[0] <= 'Z'
+                                && chars[1]>='A' && chars[1] <= 'Z'
+                                && chars[2]>='0' && chars[2] <= '9'
+                                && chars[3]>='0' && chars[3] <= '9';
+
+            if (matchSuccess)
             {
-                var country = match.Groups["COUNTRY"].Value;
-                var check = match.Groups["CHECK"].Value;
-                var account = match.Groups["ACCOUNT"].Value;
+                var country = new string(chars, 0, 2);
 
                 var resolvedCountry = _countryProvider.GetCountryOrNull(country);
 
                 if (resolvedCountry == null)
                     return ParseResult<IBAN>.ForFailure(new Exception($"Unknown country code: {country}"));
 
-                var num = 0;
-                if (!int.TryParse(check, NumberStyles.Integer, CultureInfo.InvariantCulture, out num))
-                    return ParseResult<IBAN>.ForFailure(new Exception($"Check digit not a number: {check}"));
+                var num = ((chars[2] - '0') * 10 + (chars[3] - '0'));
 
                 var segments = resolvedCountry.AccountNumberFormatInfo?.StructureInfo?.Segments;
-                if(segments==null)
+                if (segments == null)
                     return ParseResult<IBAN>.ForFailure(new Exception($"Format information unavailable for country {country}")); // TODO: Skip check when country format info missing?
 
-                if (PatternConverter.IsMatch(account, segments))
+                if (SegmentsMatcher.IsMatch(segments, chars, 4, chars.Length-4))
                 {
+                    var account = new string(chars, 4, chars.Length - 4);
                     return ParseResult<IBAN>.ForSuccess(new IBAN(new BBAN(resolvedCountry, account, false), num));
                 }
                 else

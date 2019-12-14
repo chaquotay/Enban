@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Xml;
-using Enban.Countries;
 using Enban.Text;
 using Xunit;
 
@@ -48,6 +47,16 @@ namespace Enban.Test.Countries
             var ibanText = new BBAN(countries[example.CountryCode], example.BBAN).ToIBAN().ToString("p", null);
 
             Assert.Equal(example.IBANPrint, ibanText);
+        }
+
+        [Theory]
+        [MemberData(nameof(Countries))]
+        public void IsValid(Example example)
+        {
+            var iban = IBANPattern.Electronic.Parse(example.IBANElectronic);
+            var isValid = iban.Value.CheckDigitValid;
+
+            Assert.True(isValid);
         }
 
         public class Example

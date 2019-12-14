@@ -56,7 +56,7 @@ namespace Enban
                 var segments = Country.AccountNumberFormatInfo?.StructureInfo?.Segments
                     ?? throw new InvalidOperationException($"Cannot validate {nameof(BBAN)} without structural information about the account number of country {Country.Name}");
 
-                if (!PatternConverter.IsMatch(bankAccountNumber, segments))
+                if (!SegmentsMatcher.IsMatch(segments, bankAccountNumber.ToCharArray()))
                 {
                     throw new ArgumentException($"Account number {bankAccountNumber} violates the pattern of account numbers of country {Country.Name}");
                 }

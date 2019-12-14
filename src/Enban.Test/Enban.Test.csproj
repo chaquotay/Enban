@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BBANTest.cs" />
+    <Compile Include="CheckDigitUtilTest.cs" />
     <Compile Include="Countries\CountriesTest.cs" />
     <Compile Include="IBANTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,6 +55,7 @@
       <DependentUpon>ReadmeUsageTest.tt</DependentUpon>
     </Compile>
     <Compile Include="Text\IBANPatternTest.cs" />
+    <Compile Include="Text\TextExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Enban\Enban.csproj">
