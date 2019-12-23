@@ -10,4 +10,4 @@ branches:
     - master
 
 before_build:
-  - nuget restore
+  - nuget restore src\Enban.sln
