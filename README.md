@@ -33,3 +33,7 @@ prints `IBAN with check digit (valid: True): DE68 2105 0170 0012 3456 78`
 ## NuGet
 
 Enban is [available on NuGet](https://www.nuget.org/packages/Enban).
+
+## Build status
+
+[![Build status](https://ci.appveyor.com/api/projects/status/1f9k8plkq3y1ijki/branch/master?svg=true)](https://ci.appveyor.com/project/chaquotay/enban-5adcw/branch/master)
