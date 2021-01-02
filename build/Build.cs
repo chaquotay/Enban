@@ -74,7 +74,7 @@ class Build : NukeBuild
         });
 
     Target Push => _ => _
-        .DependsOn(Compile)
+        .DependsOn(Pack)
         .OnlyWhenDynamic(() => !string.IsNullOrEmpty(ApiKey))
         .Executes(() =>
         {
