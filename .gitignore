@@ -261,3 +261,5 @@ __pycache__/
 *.pyc
 
 /doc/Help/*.ch?
+
+/output/test-results/*.xml
