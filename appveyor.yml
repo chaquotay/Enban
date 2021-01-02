@@ -7,7 +7,7 @@ configuration: Release
 
 branches:
   only:
-    - master
+    - main
 
 before_build:
   - nuget restore src\Enban.sln
