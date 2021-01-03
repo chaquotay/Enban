@@ -19,10 +19,10 @@ namespace Enban.Countries
 
         private static Dictionary<string, Country> ToCountriesByCode(IEnumerable<Country> countries)
         {
-            if(countries==null)
-                return new Dictionary<string, Country>();
-
-            return countries.GroupBy(c => c.Code).Where(g => g.Count() == 1).ToDictionary(g => g.Key, g => g.Single());
+            return countries
+                .GroupBy(c => c.Code)
+                .Where(g => g.Count() == 1)
+                .ToDictionary(g => g.Key, g => g.Single());
         }
 
         public IEnumerable<string> GetCodes()
@@ -30,11 +30,10 @@ namespace Enban.Countries
             return _countries.Keys;
         }
 
-        public Country ForCode(string code)
+        public Country? ForCode(string code)
         {
-            Country c = null;
-            _countries.TryGetValue(code, out c);
-            return c;
+            _countries.TryGetValue(code, out var country);
+            return country;
         }
     }
 }

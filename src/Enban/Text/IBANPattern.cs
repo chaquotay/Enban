@@ -120,9 +120,6 @@ namespace Enban.Text
         /// <inheritdoc />
         public ParseResult<IBAN> Parse(string text)
         {
-            if (text == null)
-                return ParseResult<IBAN>.ForFailure(null);
-
             var chars = text.ToCharArray();
             if (_type == IBANPatternType.Print)
             {

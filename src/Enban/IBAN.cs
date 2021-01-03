@@ -48,7 +48,15 @@ namespace Enban
         }
 
         /// <inheritdoc />
-        public string ToString(string format, IFormatProvider formatProvider)
+        public string ToString(string format, IFormatProvider formatProvider) => Format(format);
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return Format("G");
+        }
+
+        private string Format(string format)
         {
             var pattern = IBANPattern.Electronic;
 
@@ -64,11 +72,6 @@ namespace Enban
             return pattern.Format(this);
         }
 
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            return ToString("G", null);
-        }
 
         /// <summary>
         /// Verifies the validity of the check digit.
@@ -94,8 +97,7 @@ namespace Enban
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is IBAN && Equals((IBAN) obj);
+            return obj is IBAN iban && Equals(iban);
         }
 
         /// <inheritdoc />

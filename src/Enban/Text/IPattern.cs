@@ -5,12 +5,13 @@ namespace Enban.Text
     /// </summary>
     /// <typeparam name="T">the type, which the implementation can <see cref="Format">format</see> and <see cref="Parse">parse</see>.</typeparam>
     public interface IPattern<T>
+        where T : struct
     {
         /// <summary>
         /// Formats a value based on this pattern.
         /// </summary>
         /// <param name="value">the value to be formatted</param>
-        /// <returns>the formatted value as a stirng</returns>
+        /// <returns>the formatted value as a string</returns>
         string Format(T value);
 
         /// <summary>

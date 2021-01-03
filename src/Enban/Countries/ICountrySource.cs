@@ -5,6 +5,6 @@ namespace Enban.Countries
     interface ICountrySource
     {
         IEnumerable<string> GetCodes();
-        Country ForCode(string code);
+        Country? ForCode(string code);
     }
 }

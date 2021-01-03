@@ -32,10 +32,8 @@ namespace Enban.Countries
                 {
                     return c;
                 }
-                else
-                {
-                    throw new UnknownCountryException(code);
-                }
+
+                throw new UnknownCountryException(code);
             }
         }
 
@@ -47,17 +45,14 @@ namespace Enban.Countries
 
         private bool TryGetCountry(string code, [NotNullWhen(true)] out Country? country)
         {
-            Country? c = null;
-            var result = false;
-
-            if (!string.IsNullOrWhiteSpace(code) && _countries.TryGetValue(code, out c))
+            if (!string.IsNullOrWhiteSpace(code) && _countries.TryGetValue(code, out var c) && c!=null)
             {
                 country = c;
-                result = true;
+                return true;
             }
 
-            country = c;
-            return result;
+            country = null;
+            return false;
         }
     }
 }

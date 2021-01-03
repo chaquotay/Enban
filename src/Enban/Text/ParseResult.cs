@@ -7,11 +7,12 @@ namespace Enban.Text
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public sealed class ParseResult<T>
+        where T : struct
     {
-        private readonly Exception _exception;
+        private readonly Exception? _exception;
         private readonly T _value;
 
-        private ParseResult(bool success, T value, Exception exception)
+        private ParseResult(bool success, T value, Exception? exception)
         {
             _value = value;
             _exception = exception;
@@ -27,7 +28,7 @@ namespace Enban.Text
         /// The failure reason in form of an <see cref="System.Exception"/> in case
         /// the parse operation was not successful.
         /// </summary>
-        public Exception Exception
+        public Exception? Exception
         {
             get
             {
@@ -74,9 +75,9 @@ namespace Enban.Text
             return new ParseResult<T>(true, value, null);
         }
 
-        internal static ParseResult<T> ForFailure(Exception ex)
+        internal static ParseResult<T> ForFailure(Exception? ex)
         {
-            return new ParseResult<T>(false, default(T), ex);
+            return new ParseResult<T>(false, default, ex);
         }
     }
 }

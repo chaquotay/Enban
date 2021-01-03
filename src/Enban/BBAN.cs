@@ -46,14 +46,14 @@ namespace Enban
 
         internal BBAN(Country country, string bankAccountNumber, bool validate)
         {
-            Country = country ?? throw new ArgumentNullException(nameof(country));
+            Country = country;
 
             if (string.IsNullOrEmpty(bankAccountNumber))
                 throw new ArgumentException("null or empty", nameof(bankAccountNumber));
 
             if (validate)
             {
-                var segments = Country.AccountNumberFormatInfo?.StructureInfo?.Segments
+                var segments = Country.AccountNumberFormatInfo.StructureInfo.Segments
                     ?? throw new InvalidOperationException($"Cannot validate {nameof(BBAN)} without structural information about the account number of country {Country.Name}");
 
                 if (!SegmentsMatcher.IsMatch(segments, bankAccountNumber.ToCharArray()))
@@ -100,8 +100,7 @@ namespace Enban
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj)) return false;
-            return obj is BBAN && Equals((BBAN) obj);
+            return obj is BBAN bban && Equals(bban);
         }
 
         /// <inheritdoc />
@@ -109,7 +108,7 @@ namespace Enban
         {
             unchecked
             {
-                return ((Country != null ? Country.GetHashCode() : 0) * 397) ^ (AccountNumber != null ? AccountNumber.GetHashCode() : 0);
+                return (Country.GetHashCode() * 397) ^ AccountNumber.GetHashCode();
             }
         }
     }

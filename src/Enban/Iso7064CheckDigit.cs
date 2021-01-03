@@ -51,7 +51,7 @@ namespace Enban
             foreach(var c in num)
             {
 
-                long dec = parts[partIndex];
+                var dec = parts[partIndex];
                 if (c >= '0' && c <= '9')
                 {
                     dec = dec * 10 + (c - '0');
@@ -92,11 +92,11 @@ namespace Enban
             var result = BigInteger.Zero;
             for (var i = 0; i <= partIndex-1; i++)
             {
-                result = result * PowersOfTen[partDigitsArr[i]];
+                result *= PowersOfTen[partDigitsArr[i]];
                 result += parts[i];
             }
 
-            result = result * PowersOfTen[partDigits];
+            result *= PowersOfTen[partDigits];
             result += parts[partIndex];
 
             return result;

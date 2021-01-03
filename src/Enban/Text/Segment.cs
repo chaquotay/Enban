@@ -55,9 +55,6 @@ namespace Enban.Text
                 if (ReferenceEquals(x, y))
                     return true;
 
-                if (x == null || y == null)
-                    return false;
-
                 if (x.Length != y.Length)
                     return false;
 
