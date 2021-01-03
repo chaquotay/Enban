@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Enban.Countries
@@ -27,8 +28,7 @@ namespace Enban.Countries
         {
             get
             {
-                Country c = null;
-                if (TryGetCountry(code, out c))
+                if (TryGetCountry(code, out var c))
                 {
                     return c;
                 }
@@ -39,16 +39,15 @@ namespace Enban.Countries
             }
         }
 
-        public Country GetCountryOrNull(string code)
+        public Country? GetCountryOrNull(string code)
         {
-            Country c = null;
-            TryGetCountry(code, out c);
+            TryGetCountry(code, out var c);
             return c;
         }
 
-        private bool TryGetCountry(string code, out Country country)
+        private bool TryGetCountry(string code, [NotNullWhen(true)] out Country? country)
         {
-            Country c = null;
+            Country? c = null;
             var result = false;
 
             if (!string.IsNullOrWhiteSpace(code) && _countries.TryGetValue(code, out c))

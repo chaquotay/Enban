@@ -8,6 +8,6 @@ namespace Enban.Countries
 
         Country this[string code] { get; }
 
-        Country GetCountryOrNull(string code);
+        Country? GetCountryOrNull(string code);
     }
 }
