@@ -40,17 +40,17 @@
   <PropertyGroup>
     <StartupObject />
     <Authors>Stephan Müller</Authors>
-    <Version>0.1.0</Version>
+    <Version>1.0.0</Version>
     <Description>Enban is an IBAN/BBAN API for .NET, including parsing, validation and formatting.</Description>
-    <Copyright>Copyright 2020</Copyright>
+    <Copyright>Copyright 2021</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/chaquotay/Enban</PackageProjectUrl>
     <PackageTags>iban banking enban</PackageTags>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/chaquotay/Enban.git</RepositoryUrl>
-    <AssemblyVersion>0.1.0.0</AssemblyVersion>
-    <FileVersion>0.1.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <IncludeContentInPack>false</IncludeContentInPack>
   </PropertyGroup>
   <ItemGroup>
