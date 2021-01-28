@@ -1,4 +1,5 @@
 using System;
+using Enban.Text;
 using Xunit;
 
 namespace Enban.Test
@@ -53,6 +54,16 @@ namespace Enban.Test
         {
             var iban = new BBAN("DE", "210501709012345678").ToIBAN(68);
             Assert.False(iban.CheckDigitValid);
+        }
+
+        [Theory]
+        [InlineData("DE68210501700012345678")]
+        [InlineData("XK051212012345678906")] // Check digit with leading zero
+        public void CheckIsValid(string iban)
+        {
+            var parsed = IBANPattern.Print.Parse(iban);
+            Assert.True(parsed.Success);
+            Assert.True(parsed.Value.CheckDigitValid);
         }
     }
 }
