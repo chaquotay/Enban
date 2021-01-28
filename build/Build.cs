@@ -80,6 +80,7 @@ class Build : NukeBuild
         {
             var packages = OutputDirectory.GlobFiles("*.nupkg");
             DotNetNuGetPush(s => s
+                .SetSource("https://api.nuget.org/v3/index.json")
                 .SetApiKey(ApiKey)
                 .CombineWith(packages, (s, package) => s.SetTargetPath(package)));
         });
