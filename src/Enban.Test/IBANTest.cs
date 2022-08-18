@@ -65,5 +65,18 @@ namespace Enban.Test
             Assert.True(parsed.Success);
             Assert.True(parsed.Value.CheckDigitValid);
         }
+        
+        [Fact]
+        public void DefaultValue()
+        {
+            var defaultIban = default(IBAN);
+            
+            Assert.Equal(defaultIban, defaultIban);
+            Assert.Null(defaultIban.Country);
+            Assert.Null(defaultIban.AccountNumber);
+            Assert.Equal(0, defaultIban.CheckDigit);
+            Assert.False(defaultIban.CheckDigitValid);
+            _ = defaultIban.GetHashCode();
+        }
     }
 }

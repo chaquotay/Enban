@@ -73,7 +73,7 @@ namespace Enban
         /// <summary>
         /// Verifies the validity of the check digit.
         /// </summary>
-        public bool CheckDigitValid => CheckDigitUtil.IsValid(Country.Code, AccountNumber, CheckDigit);
+        public bool CheckDigitValid => Country != null && CheckDigitUtil.IsValid(Country.Code, AccountNumber, CheckDigit);
 
         /// <summary>
         /// The country associated with this IBAN (and its underlying <see cref="BBAN"/>).

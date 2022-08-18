@@ -23,5 +23,16 @@ namespace Enban.Test
         {
             Assert.Throws<ArgumentException>(() => new BBAN("DE", "X70400440532013000"));
         }
+
+        [Fact]
+        public void DefaultValue()
+        {
+            var defaultBban = default(BBAN);
+            
+            Assert.Equal(defaultBban, defaultBban);
+            Assert.Null(defaultBban.Country);
+            Assert.Null(defaultBban.AccountNumber);
+            _ = defaultBban.GetHashCode();
+        }
     }
 }

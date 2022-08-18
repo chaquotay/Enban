@@ -94,7 +94,7 @@ namespace Enban
         /// <inheritdoc />
         public bool Equals(BBAN other)
         {
-            return Equals(Country.Code, other.Country.Code) && string.Equals(AccountNumber, other.AccountNumber);
+            return Equals(Country?.Code, other.Country?.Code) && string.Equals(AccountNumber, other.AccountNumber);
         }
 
         /// <inheritdoc />
