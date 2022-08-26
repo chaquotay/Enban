@@ -7,13 +7,15 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Enban</RootNamespace>
     <AssemblyName>Enban</AssemblyName>
-    <TargetFramework>netstandard1.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <TargetFrameworkProfile />
+    <LangVersion>9</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -66,5 +68,10 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="Nullable" Version="1.3.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>

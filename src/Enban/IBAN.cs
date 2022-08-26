@@ -81,6 +81,11 @@ namespace Enban
         public Country Country => BBAN.Country;
 
         /// <summary>
+        /// The code of the country associated with this IBAN (and its underlying <see cref="BBAN"/>).
+        /// </summary>
+        public string CountryCode => BBAN.Country.Code;
+
+        /// <summary>
         /// The account number associated with this IBAN (and its underlying <see cref="BBAN"/>)
         /// </summary>
         public string AccountNumber => BBAN.AccountNumber;

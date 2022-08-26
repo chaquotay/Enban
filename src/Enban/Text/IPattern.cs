@@ -1,23 +1,24 @@
 namespace Enban.Text
 {
     /// <summary>
-    /// Common interface of pattern implementations
+    /// Generic interface supporting parsing and formatting. Parsing always results in a <see cref="ParseResult{T}"/>
+    /// which can represent success or failure.
     /// </summary>
-    /// <typeparam name="T">the type, which the implementation can <see cref="Format">format</see> and <see cref="Parse">parse</see>.</typeparam>
+    /// <typeparam name="T">Type of value to parse or format.</typeparam>
     public interface IPattern<T>
     {
         /// <summary>
-        /// Formats a value based on this pattern.
+        /// Formats the given value as text according to the rules of this pattern.
         /// </summary>
-        /// <param name="value">the value to be formatted</param>
-        /// <returns>the formatted value as a stirng</returns>
+        /// <param name="value">The value to format.</param>
+        /// <returns>The value formatted according to this pattern.</returns>
         string Format(T value);
 
         /// <summary>
-        /// Tries to parse a string representation of a value of type <typeparam name="T"/>.
+        /// Parses the given text value according to the rules of this pattern.
         /// </summary>
-        /// <param name="text">the text to be parsed</param>
-        /// <returns>the parse result (in case of both success and failure)</returns>
+        /// <param name="text">The text value to parse.</param>
+        /// <returns>The result of parsing, which may be successful or unsuccessful. (The value returned is never null.)</returns>
         ParseResult<T> Parse(string text);
     }
 }
