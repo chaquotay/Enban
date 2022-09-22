@@ -17,7 +17,7 @@
 
 
     <ItemGroup>
-        <Compile Include="..\Enban\Text\AccountNumberFormatInfo.cs" Link="AccountNumberFormatInfo.cs" />
+        <Compile Include="..\Enban\Text\SegmentExtensions.cs" Link="SegmentExtensions.cs" />
         <Compile Include="..\Enban\Text\Segment.cs" Link="Segment.cs" />
         <Compile Include="..\Enban\Text\CharacterClass.cs" Link="CharacterClass.cs" />
         <Compile Include="..\Enban\Text\LengthIndication.cs" Link="LengthIndication.cs" />

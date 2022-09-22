@@ -63,13 +63,12 @@ namespace Enban
 
         private IBAN(string countryCode, int? checkDigit, string accountNumber)
         {
-            var formatInfo = KnownCountryAccountPatterns.Get(countryCode);
-            if (formatInfo == null)
+            if (!KnownCountryAccountPatterns.TryGetSegments(countryCode, out var segments))
             {
                 throw new ArgumentException($"unsupported country code: {countryCode}");
             }
 
-            if (!SegmentsMatcher.IsMatch(formatInfo.Segments, accountNumber.ToCharArray()))
+            if (!SegmentsMatcher.IsMatch(segments, accountNumber.ToCharArray()))
             {
                 throw new ArgumentException($"invalid account number format: {accountNumber}");
             }

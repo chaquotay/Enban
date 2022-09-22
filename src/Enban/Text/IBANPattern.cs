@@ -106,15 +106,13 @@ namespace Enban.Text
                 return false;
             }
             
-            text = Normalize(text, style);
+            var chars = ToNormalizedCharArray(text, style);
             
-            if (text.Length < 5) // two characters for country coude, two characters for check digit, at least one char for account number
+            if (chars.Length < 5) // two characters for country coude, two characters for check digit, at least one char for account number
             {
                 error = "text is too short";
                 return false;
             }
-
-            var chars = text.ToCharArray();
 
             var matchSuccess = chars.Length > 4 
                                && chars[0]>='A' && chars[0] <= 'Z'
@@ -126,19 +124,26 @@ namespace Enban.Text
             {
                 countryCode = new string(chars, 0, 2);
                 checkDigit = (chars[2] - '0') * 10 + (chars[3] - '0');
-                
-                var formatInfo = countryAccountPatterns.Get(countryCode);
-                if (formatInfo == null)
+
+                if (!countryAccountPatterns.TryGetSegments(countryCode, out var segments))
                 {
                     error = $"Format information unavailable for country {countryCode}";
                     return false;
                 }
-
-                var segments = formatInfo.Segments;
+                
                 if (SegmentsMatcher.IsMatch(segments, chars, 4, chars.Length-4))
                 {
                     accountNumber = new string(chars, 4, chars.Length - 4);
-                    return true;
+                    
+                    if (style.HasFlag(IBANStyles.AllowInvalidCheckDigit) || CheckDigitUtil.IsValid(countryCode, accountNumber, checkDigit))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        error = "invalid check digit";
+                        return false;
+                    }
                 }
             }
 
@@ -146,23 +151,16 @@ namespace Enban.Text
             return false;
         }
         
-        private static string Normalize(string s, IBANStyles style)
+        private static char[] ToNormalizedCharArray(string s, IBANStyles style)
         {
-            // TODO: change to char[]?
-            
-            if (style.HasFlag(IBANStyles.AllowLeadingWhite))
-                s = s.TrimStart();
-
-            if (style.HasFlag(IBANStyles.AllowTrailingWhite))
-                s = s.TrimEnd();
-
-            if (style.HasFlag(IBANStyles.AllowIntermediateWhite))
-                s = new string(s.ToArray().Trim());
-
             if (style.HasFlag(IBANStyles.IgnoreCase))
                 s = s.ToUpperInvariant();
-                
-            return s;
+            
+            var trimStart = style.HasFlag(IBANStyles.AllowLeadingWhite);
+            var trimMiddle = style.HasFlag(IBANStyles.AllowIntermediateWhite);
+            var trimEnd = style.HasFlag(IBANStyles.AllowTrailingWhite);
+
+            return s.ToTrimmedCharArray(trimStart, trimMiddle, trimEnd);
         }
 
     }

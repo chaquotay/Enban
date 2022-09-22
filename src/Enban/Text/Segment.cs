@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
 
 namespace Enban.Text
 {
@@ -23,6 +26,29 @@ namespace Enban.Text
             _characterClass = characterClass;
             _length = length;
             _lengthIndication = lengthIndication;
+        }
+
+        public override string ToString() => ToPattern();
+
+        public string ToPattern()
+        {
+            var patternText = new StringBuilder();
+            patternText.Append(Length);
+            if (LengthIndication == LengthIndication.Fixed)
+            {
+                patternText.Append('!');
+            }
+
+            patternText.Append(CharacterClass switch
+            {
+                CharacterClass.Digits => 'n',
+                CharacterClass.AlphanumericCharacters => 'c',
+                CharacterClass.UpperCaseLetters => 'a',
+                CharacterClass.BlankSpace => 'e',
+                _ => throw new InvalidOperationException()
+            });
+
+            return patternText.ToString();
         }
 
         public bool Equals(Segment other)
@@ -98,6 +124,52 @@ namespace Enban.Text
                 }
             }
         }
+        
+        public static bool TryParse(string patternText, [NotNullWhen(true)] out Segment[]? segments)
+        {
+            segments = null;
+            
+            var pattern = new System.Text.RegularExpressions.Regex("((?<COUNT>[1-9][0-9]*!?)(?<CHAR>[nace]))+");
+            var match = pattern.Match(patternText);
+            if (!match.Success)
+                return false;
 
+            var g = match.Groups["COUNT"];
+
+            var counts = (
+                from System.Text.RegularExpressions.Capture capture in g.Captures
+                let count = capture.Value
+                let isFixed = count.EndsWith("!")
+                let num = isFixed ? count.Substring(0, count.Length - 1) : count.Substring(0, count.Length)
+                let parsedNum = short.Parse(num)
+                select new Tuple<short, LengthIndication>(parsedNum,
+                    isFixed ? LengthIndication.Fixed : LengthIndication.Maximum)
+            ).ToList();
+
+            var chars = (
+                from System.Text.RegularExpressions.Capture capture in match.Groups["CHAR"].Captures
+                let charClass = ToChararcterClass(capture.Value[0])
+                where charClass.HasValue
+                select charClass.Value
+            ).ToList();
+
+            if (chars.Count != counts.Count) // invalid char class!?!
+                return false;
+
+            segments = counts.Zip(chars, (cnt, chr) => new Segment(chr, cnt.Item1, cnt.Item2)).ToArray();
+            return true;
+
+            CharacterClass? ToChararcterClass(char c)
+            {
+                return c switch
+                {
+                    'n' => CharacterClass.Digits,
+                    'c' => CharacterClass.AlphanumericCharacters,
+                    'a' => CharacterClass.UpperCaseLetters,
+                    'e' => CharacterClass.BlankSpace,
+                    _ => null
+                };
+            }
+        }
     }
 }

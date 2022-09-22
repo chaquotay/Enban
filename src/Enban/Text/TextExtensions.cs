@@ -21,78 +21,98 @@ namespace Enban.Text
         
         public static char[] Trim(this char[] text, bool trimStart, bool trimMiddle, bool trimEnd)
         {
+            // No trimming at all -> just return text
             if (!trimStart && !trimMiddle && !trimEnd)
                 return text;
             
-            var offset = 0;
-            var chars = new char[text.Length];
+            var buffer = new char[text.Length]; // temporary buffer for trimmed chars
+            var offset = 0; // position of next write inside buffer
+            
+            var leadingWhiteSpaceCount = CountLeadingWhiteSpace(text);
 
-            var prefixLen = 0;
-            while (prefixLen < text.Length && IsWhitespace(text[prefixLen]))
-                prefixLen++;
-
-            if (prefixLen == text.Length)
+            if (leadingWhiteSpaceCount == text.Length) // only white-space
             {
                 if (trimStart || trimEnd)
                 {
+                    // trim at start or end results in empty char array
                     return Array.Empty<char>();
                 }
                 else
                 {
+                    // only trimming in the middle allowed, but not applicable in text full of white-space
                     return text;
                 }
             }
-
-            var suffixLen = 0;
-            for (var i = text.Length - 1; i >= 0; i--)
+            
+            var trailingWhiteSpaceCount = CountTrailingWhiteSpace(text);
+            
+            if (!trimStart && leadingWhiteSpaceCount>0)
             {
-                if (IsWhitespace(text[i]))
-                {
-                    suffixLen++;
-                }
-                else
-                {
-                    break;
-                }
+                // Copy leading WS if no trimming at the start
+                Array.Copy(text, 0, buffer, 0, leadingWhiteSpaceCount);
+                offset = leadingWhiteSpaceCount;
             }
             
-            if (!trimStart && prefixLen>0)
-            {
-                Array.Copy(text, 0, chars, 0, prefixLen);
-                offset = prefixLen;
-            }
-
             if (trimMiddle)
             {
-                var lastIndex = text.Length - suffixLen - 1;
-                for(var index=prefixLen; index<=lastIndex; index++)
+                // Filter white-space inside the part between leading and trailing WS
+                var lastIndex = text.Length - trailingWhiteSpaceCount - 1;
+                for(var index=leadingWhiteSpaceCount; index<=lastIndex; index++)
                 {
                     var c = text[index];
                     if (!IsWhitespace(c))
                     {
-                        chars[offset++] = c;
+                        buffer[offset++] = c;
                     }
                 }
             }
             else
             {
-                var middleLen = text.Length - suffixLen - prefixLen;
+                // Copy middle part without filtering WS
+                var middleLen = text.Length - trailingWhiteSpaceCount - leadingWhiteSpaceCount;
                 if (middleLen > 0)
                 {
-                    Array.Copy(text, prefixLen, chars, offset, middleLen);
+                    Array.Copy(text, leadingWhiteSpaceCount, buffer, offset, middleLen);
                     offset += middleLen;
                 }
             }
 
-            if (!trimEnd && suffixLen > 0)
+            if (!trimEnd && trailingWhiteSpaceCount > 0)
             {
-                Array.Copy(text, text.Length-suffixLen, chars, offset, suffixLen);
-                offset += suffixLen;
+                // Copy trialing WS if no trimming at the end
+                Array.Copy(text, text.Length-trailingWhiteSpaceCount, buffer, offset, trailingWhiteSpaceCount);
+                offset += trailingWhiteSpaceCount;
             }
             
-            var result = new char[offset];
-            Array.Copy(chars, 0, result, 0, result.Length);
-            return result;
+            Array.Resize(ref buffer, offset);
+            return buffer;
+            
+            int CountLeadingWhiteSpace(char[] chars)
+            {
+                for (var i = 0; i < chars.Length; i++)
+                {
+                    if (!IsWhitespace(chars[i]))
+                    {
+                        return i;
+                    }
+                }
+                return chars.Length;
+            }
+
+            int CountTrailingWhiteSpace(char[] chars)
+            {
+                var count = 0;
+                for (var i = chars.Length - 1; i >= 0; i--)
+                {
+                    if (!IsWhitespace(chars[i]))
+                    {
+                        return count;
+                    }
+
+                    count++;
+                }
+                return chars.Length;
+            }
         }
     }
 }

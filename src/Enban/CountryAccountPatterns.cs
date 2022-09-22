@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Enban.Text;
 
 namespace Enban
 {
     public class CountryAccountPatterns
     {
-        private readonly Dictionary<string, AccountNumberFormatInfo> _patterns;
+        private readonly Dictionary<string, Segment[]> _patterns;
 
         public CountryAccountPatterns()
         {
@@ -15,7 +16,7 @@ namespace Enban
 
         public CountryAccountPatterns(CountryAccountPatterns source)
         {
-            _patterns = new Dictionary<string, AccountNumberFormatInfo>(source._patterns, StringComparer.OrdinalIgnoreCase);
+            _patterns = new Dictionary<string, Segment[]>(source._patterns, StringComparer.OrdinalIgnoreCase);
         }
         
         /// <summary>
@@ -25,9 +26,9 @@ namespace Enban
         /// <param name="accountPattern"></param>
         public void Add(string countryCode, string accountPattern)
         {
-            if (AccountNumberFormatInfo.TryParse(accountPattern, out var info))
+            if (Segment.TryParse(accountPattern, out var segments))
             {
-                Add(countryCode, info);
+                Add(countryCode, segments);
             }
             else
             {
@@ -35,23 +36,31 @@ namespace Enban
             }
         }
 
-        public string? GetPattern(string countryCode)
+        public bool TryGetPattern(string countryCode, [NotNullWhen(true)] out string? pattern)
         {
             if (_patterns.TryGetValue(countryCode, out var info))
             {
-                return info.ToPattern();
+                pattern = info.ToPattern();
+                return true;
             }
             else
             {
-                return null;
+                pattern = null;
+                return false;
             }
         }
 
-        internal void Add(string countryCode, AccountNumberFormatInfo pattern)
+        internal void Add(string countryCode, params Segment[] pattern)
         {
+            if (pattern.Length == 0)
+                throw new ArgumentException("empty pattern array", nameof(pattern));
+            
             _patterns.Add(countryCode, pattern);
         }
 
-        internal AccountNumberFormatInfo? Get(string countryCode) => _patterns.TryGetValue(countryCode, out var info) ? info : null;
+        internal bool TryGetSegments(string countryCode, [NotNullWhen(true)] out Segment[]? segments)
+        {
+            return _patterns.TryGetValue(countryCode, out segments);
+        }
     }
 }

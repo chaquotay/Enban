@@ -74,5 +74,24 @@ namespace Enban.Test
             
             Assert.Null(defaultIban);
         }
+
+        [Fact]
+        public void Parse_NotAllowInvalidCheckDigit_WithInvalidCheckDigit()
+        {
+            var noInvalidCheckDigit = IBANStyles.Lenient & ~IBANStyles.AllowInvalidCheckDigit;
+            var parsed = IBAN.TryParse("DE68210501709012345678", noInvalidCheckDigit, out _);
+
+            Assert.False(parsed);
+        }
+        
+        [Fact]
+        public void Parse_NotAllowInvalidCheckDigit_WithValidCheckDigit()
+        {
+            var noInvalidCheckDigit = IBANStyles.Lenient & ~IBANStyles.AllowInvalidCheckDigit;
+            var parsed = IBAN.TryParse("DE68210501700012345678", noInvalidCheckDigit, out var iban);
+
+            Assert.True(parsed);
+            Assert.True(iban.CheckDigitValid);
+        }
     }
 }

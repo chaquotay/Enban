@@ -30,17 +30,16 @@ foreach (var countryNode in GetCountries(countriesPath))
 {
     source.AppendLine($"        // " + countryNode.GetAttribute("bban-structure"));
     source.AppendLine($"        Default.Add(\"" + countryNode.GetAttribute("code") + "\", ");
-    source.AppendLine($"            new Text.AccountNumberFormatInfo(");
 
-    if (AccountNumberFormatInfo.TryParse(countryNode.GetAttribute("bban-structure"), out var info))
+    if (Segment.TryParse(countryNode.GetAttribute("bban-structure"), out var segments))
     {
         var segmentsText = string.Join(",\r\n",
-            info.Segments.Select(segment =>
+            segments.Select(segment =>
                 $"new Text.Segment(Text.CharacterClass.{segment.CharacterClass}, {segment.Length}, Text.LengthIndication.{segment.LengthIndication})"));
         source.AppendLine(segmentsText);
     }
     
-    source.AppendLine($"            ));");
+    source.AppendLine($"            );");
 }
 
 

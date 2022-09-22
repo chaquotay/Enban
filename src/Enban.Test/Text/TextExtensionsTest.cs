@@ -49,6 +49,9 @@ namespace Enban.Test.Text
 
         [Theory]
         [InlineData("Foobar", true, true, true, "Foobar")]
+        [InlineData("Foobar", false, false, false, "Foobar")]
+        [InlineData("   ", false, false, false, "   ")]
+        [InlineData("   ", false, true, false, "   ")]
         [InlineData("", true, true, true, "")]
         [InlineData("", false, false, false, "")]
         [InlineData("   Foo bar  ", true, true, true, "Foobar")]
@@ -59,6 +62,8 @@ namespace Enban.Test.Text
         [InlineData("   Foo bar  ", true, false, false, "Foo bar  ")]
         [InlineData("   Foo bar  ", false, true, false, "   Foobar  ")]
         [InlineData("   Foo bar  ", false, false, true, "   Foo bar")]
+        
+        [InlineData("   Foo bar  ", false, false, false, "   Foo bar  ")]
         public void TestTestRemoveWhitespaces(string t, bool start, bool middle, bool end, string expected)
         {
             var actual = new string(t.ToTrimmedCharArray(start, middle, end));
