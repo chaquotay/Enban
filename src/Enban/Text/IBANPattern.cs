@@ -28,6 +28,11 @@ namespace Enban.Text
         
         internal static string Format(IBAN value, string format)
         {
+            if (!"e".Equals(format) && !string.IsNullOrEmpty(format) && !"G".Equals(format) && !"p".Equals(format))
+            {
+                throw new ArgumentException($"invalid format: {format}", nameof(format));
+            }
+
             var addWhiteSpace = "p".Equals(format);
             
             var accountNumber = value.AccountNumber;

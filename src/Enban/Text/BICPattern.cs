@@ -7,22 +7,30 @@ namespace Enban.Text
     public sealed partial class BICPattern : IPattern<BIC>
     {
         private readonly BICStyles _parseStyles;
-        private readonly bool _addPrimaryBranchCode;
+        private readonly string _format;
         private readonly Predicate<string> _isKnownCountryCode;
 
-        private BICPattern(BICStyles parseStyles, bool addPrimaryBranchCode, Predicate<string> isKnownCountryCode)
+        private BICPattern(BICStyles parseStyles, string format, Predicate<string> isKnownCountryCode)
         {
             _parseStyles = parseStyles;
-            _addPrimaryBranchCode = addPrimaryBranchCode;
+            _format = format;
             _isKnownCountryCode = isKnownCountryCode;
         }
 
         /// <inheritdoc />
-        public string Format(BIC value)
+        public string Format(BIC value) => Format(value, _format);
+
+        internal static string Format(BIC value, string format)
         {
+            if (!"f".Equals(format) && !string.IsNullOrEmpty(format) && !"G".Equals(format) && !"c".Equals(format))
+            {
+                throw new ArgumentException($"invalid format: {format}", nameof(format));
+            }
+            
             string formatted;
 
-            if (_addPrimaryBranchCode || !"XXX".Equals(value.BranchCode))
+            var addPrimaryBranchCode = "f".Equals(format);
+            if (addPrimaryBranchCode || !"XXX".Equals(value.BranchCode))
             {
                 formatted = $"{value.InstitutionCode}{value.CountryCode}{value.LocationCode}{value.BranchCode}";
             }

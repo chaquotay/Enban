@@ -7,11 +7,16 @@ namespace Enban.Text
     {
         internal static bool DefaultIsKnownCountryCode(string code) => BIC.KnownCountryCodes.Contains(code);
         
+        public static BICPattern Create(BICStyles styles = BICStyles.Lenient, string format="c", Predicate<string>? isKnownCountryCode = null)
+        {
+            return new BICPattern(styles, format, isKnownCountryCode ?? DefaultIsKnownCountryCode);
+        }
+
         /// <summary>
         /// Creates a <see cref="BICPattern"/> for compact BICs using the default list of known country codes
         /// (see <see cref="BIC.KnownCountryCodes"/>)
         /// </summary>
-        public static BICPattern Compact { get; } = CreateCompact(DefaultIsKnownCountryCode);
+        public static BICPattern Compact { get; } = CreateCompact();
 
         /// <summary>
         /// Creates a <see cref="BICPattern"/> for compact BICs using the given list of known country codes
@@ -22,16 +27,16 @@ namespace Enban.Text
             return CreateCompact(ToKnownCountryPredicate(allowedCountryCodes));
         }
         
-        private static BICPattern CreateCompact(Predicate<string> isKnownCountryCode)
+        public static BICPattern CreateCompact(Predicate<string>? isKnownCountryCode = null)
         {
-            return new BICPattern(BICStyles.Compact, false, isKnownCountryCode);
+            return Create(BICStyles.Compact, "c", isKnownCountryCode);
         }
         
         /// <summary>
         /// Creates a <see cref="BICPattern"/> for full BICs using the default list of known country codes
         /// (see <see cref="BIC.KnownCountryCodes"/>)
         /// </summary>
-        public static BICPattern Full { get; } = CreateFull(DefaultIsKnownCountryCode);
+        public static BICPattern Full { get; } = CreateFull();
         
         /// <summary>
         /// Creates a <see cref="BICPattern"/> for full BICs using the given list of known country codes
@@ -41,9 +46,9 @@ namespace Enban.Text
         {
             return CreateFull(ToKnownCountryPredicate(allowedCountryCodes));
         }
-        private static BICPattern CreateFull(Predicate<string> isKnownCountryCode)
+        private static BICPattern CreateFull(Predicate<string>? isKnownCountryCode = null)
         {
-            return new BICPattern(BICStyles.Full, true, isKnownCountryCode);
+            return Create(BICStyles.Full, "f", isKnownCountryCode);
         }
         
         private static Predicate<string> ToKnownCountryPredicate(IEnumerable<string> allowedCountryCodes)
