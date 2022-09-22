@@ -20,16 +20,16 @@ namespace Enban.SourceGenerators
                 var source = new StringBuilder();
                 source.AppendLine("using System.Collections.Generic;");
 source.AppendLine($"// {DateTime.Now:G}");
-source.AppendLine("namespace Enban.Countries {");
+source.AppendLine("namespace Enban.Text {");
 source.AppendLine("");
-source.AppendLine("    internal partial class PregeneratedCountryAccountPatterns {");
+source.AppendLine("    public partial class IBANPattern {");
 source.AppendLine("");
 source.AppendLine("        static partial void InitDefault() {");
 
 foreach (var countryNode in GetCountries(countriesPath))
 {
     source.AppendLine($"        // " + countryNode.GetAttribute("bban-structure"));
-    source.AppendLine($"        Default.Add(\"" + countryNode.GetAttribute("code") + "\", ");
+    source.AppendLine($"        DefaultCountryAccountPatterns.Add(\"" + countryNode.GetAttribute("code") + "\", ");
 
     if (Segment.TryParse(countryNode.GetAttribute("bban-structure"), out var segments))
     {
@@ -49,7 +49,7 @@ source.AppendLine("}");
             
             
             
-                context.AddSource("PregeneratedCountryAccountPatterns.g.cs", source.ToString());
+                context.AddSource("IBANPattern.g.cs", source.ToString());
             }
         }
         

@@ -1,9 +1,11 @@
-﻿using Enban.Countries;
-
-namespace Enban.Text
+﻿namespace Enban.Text
 {
     public partial class IBANPattern
     {
-        public static CountryAccountPatterns DefaultCountryAccountPatterns { get; } = new(PregeneratedCountryAccountPatterns.Default);
+        public static CountryAccountPatterns DefaultCountryAccountPatterns { get; } = new();
+
+        static IBANPattern() => InitDefault();
+        
+        static partial void InitDefault();
     }
 }
