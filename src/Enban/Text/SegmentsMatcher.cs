@@ -1,21 +1,19 @@
-using System.Collections.Generic;
-
 namespace Enban.Text
 {
     internal static class SegmentsMatcher
     {
-        public static bool IsMatch(List<Segment> segments, char[] chars)
+        public static bool IsMatch(Segment[] segments, char[] chars)
         {
             return IsMatch(segments, chars, 0, chars.Length);
         }
 
-        public static bool IsMatch(List<Segment> segments, char[] chars, int offset, int len)
+        public static bool IsMatch(Segment[] segments, char[] chars, int offset, int len)
         {
             if (offset + len > chars.Length)
                 return false;
 
             var expectedLen = 0;
-            var segmentsCount = segments.Count;
+            var segmentsCount = segments.Length;
 
             for (var i = 0; i < segmentsCount; i++)
             {
