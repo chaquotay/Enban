@@ -6,21 +6,21 @@ namespace Enban.Text
 {
     public sealed partial class BICPattern : IPattern<BIC>
     {
-        private readonly BICStyles _parseStyles;
+        private readonly BICStyles _styles;
         private readonly string _format;
         private readonly Predicate<string> _isKnownCountryCode;
 
-        private BICPattern(BICStyles parseStyles, string format, Predicate<string> isKnownCountryCode)
+        public BICPattern(BICStyles styles = BICStyles.Lenient, string format="c", Predicate<string>? isKnownCountryCode = null)
         {
-            _parseStyles = parseStyles;
+            _styles = styles;
             _format = format;
-            _isKnownCountryCode = isKnownCountryCode;
+            _isKnownCountryCode = isKnownCountryCode ?? DefaultIsKnownCountryCode;
         }
 
         /// <inheritdoc />
         public string Format(BIC value) => Format(value, _format);
 
-        internal static string Format(BIC value, string format)
+        internal static string Format(BIC value, string? format)
         {
             if (!"f".Equals(format) && !string.IsNullOrEmpty(format) && !"G".Equals(format) && !"c".Equals(format))
             {
@@ -45,7 +45,7 @@ namespace Enban.Text
         /// <inheritdoc />
         public ParseResult<BIC> Parse(string text)
         {
-            var valid = ParseAndValidate(text, _parseStyles, _isKnownCountryCode, out var ic, out var cc, out var lc,
+            var valid = ParseAndValidate(text, _styles, _isKnownCountryCode, out var ic, out var cc, out var lc,
                 out var bc, out var error);
             if (valid)
             {

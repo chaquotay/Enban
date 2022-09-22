@@ -13,9 +13,9 @@ namespace Enban.Text
         private readonly IBANStyles _styles;
         private readonly string _format;
 
-        private IBANPattern(IBANStyles styles, string format, CountryAccountPatterns countryAccountPatterns)
+        private IBANPattern(IBANStyles styles = IBANStyles.Lenient, string format = "e", CountryAccountPatterns? countryAccountPatterns = null)
         {
-            _countryAccountPatterns = countryAccountPatterns;
+            _countryAccountPatterns = countryAccountPatterns ?? DefaultCountryAccountPatterns;
             _styles = styles;
             _format = format;
         }
@@ -26,7 +26,7 @@ namespace Enban.Text
             return Format(value, _format);
         }
         
-        internal static string Format(IBAN value, string format)
+        internal static string Format(IBAN value, string? format)
         {
             if (!"e".Equals(format) && !string.IsNullOrEmpty(format) && !"G".Equals(format) && !"p".Equals(format))
             {

@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using Enban.Countries;
 using Enban.Text;
 
 namespace Enban
@@ -37,7 +36,7 @@ namespace Enban
         /// <exception cref="ArgumentException">if the account number is malformed</exception>
         public IBAN(string iban)
         {
-            if (IBANPattern.ParseAndValidate(iban, IBANStyles.Lenient, KnownCountryAccountPatterns, out var cc,
+            if (IBANPattern.ParseAndValidate(iban, IBANStyles.Lenient, IBANPattern.DefaultCountryAccountPatterns, out var cc,
                     out var cd, out var ac, out var error))
             {
                 CountryCode = cc;
@@ -63,7 +62,7 @@ namespace Enban
 
         private IBAN(string countryCode, int? checkDigit, string accountNumber)
         {
-            if (!KnownCountryAccountPatterns.TryGetSegments(countryCode, out var segments))
+            if (!IBANPattern.DefaultCountryAccountPatterns.TryGetSegments(countryCode, out var segments))
             {
                 throw new ArgumentException($"unsupported country code: {countryCode}");
             }
@@ -126,7 +125,7 @@ namespace Enban
         /// <returns>whether <paramref name="text"/> was parsed sucessfully</returns>
         public static bool TryParse(string text, IBANStyles style, [NotNullWhen(true)] out IBAN? parsed)
         {
-            var isValid = IBANPattern.ParseAndValidate(text, style, KnownCountryAccountPatterns, out var cc, out var cd, out var ac, out _);
+            var isValid = IBANPattern.ParseAndValidate(text, style, IBANPattern.DefaultCountryAccountPatterns, out var cc, out var cd, out var ac, out _);
             
             if (isValid)
             {
@@ -163,7 +162,5 @@ namespace Enban
                 return hashCode;
             }
         }
-
-        public static CountryAccountPatterns KnownCountryAccountPatterns { get; } = new(PregeneratedCountryAccountPatterns.Default);
     }
 }
