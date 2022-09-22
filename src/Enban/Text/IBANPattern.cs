@@ -170,7 +170,7 @@ namespace Enban.Text
                     return false;
                 }
 
-                var segments = formatInfo.StructureInfo.Segments;
+                var segments = formatInfo.Segments;
                 if (SegmentsMatcher.IsMatch(segments, chars, 4, chars.Length-4))
                 {
                     accountNumber = new string(chars, 4, chars.Length - 4);

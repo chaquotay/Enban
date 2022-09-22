@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using Enban.Countries;
 using Enban.Text;
 
@@ -68,7 +69,7 @@ namespace Enban
                 throw new ArgumentException($"unsupported country code: {countryCode}");
             }
 
-            if (!SegmentsMatcher.IsMatch(formatInfo.StructureInfo.Segments, accountNumber.ToCharArray()))
+            if (!SegmentsMatcher.IsMatch(formatInfo.Segments, accountNumber.ToCharArray()))
             {
                 throw new ArgumentException($"invalid account number format: {accountNumber}");
             }
@@ -98,7 +99,7 @@ namespace Enban
         /// <inheritdoc />
         public override string ToString()
         {
-            return ToString("G", null);
+            return ToString("G", CultureInfo.CurrentCulture);
         }
 
         /// <summary>

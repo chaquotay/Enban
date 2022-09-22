@@ -10,10 +10,11 @@ namespace Enban.Text
     /// </summary>
     internal class AccountNumberFormatInfo
     {
-        public StructureInfo StructureInfo { get; set; }
-
-        //public StructureInfo BankIdentifier { get; set; }
-        //public StructureInfo BranchIdentifier { get; set; }
+        public AccountNumberFormatInfo(params Segment[] segments)
+        {
+            Segments = segments.ToList();
+        }
+        public List<Segment> Segments { get; }
 
 
         public static bool TryParse(string pattern, [NotNullWhen(true)] out AccountNumberFormatInfo? info)
@@ -50,10 +51,8 @@ namespace Enban.Text
                 segments.Add(new Segment(cc.Value, (short)segment.Item2, segment.Item3 ? LengthIndication.Fixed : LengthIndication.Maximum));
             }
 
-            info = new AccountNumberFormatInfo
-            {
-                StructureInfo = new StructureInfo(0, segments)
-            };
+            info = new AccountNumberFormatInfo();
+            info.Segments.AddRange(segments);
             return true;
         } 
         
