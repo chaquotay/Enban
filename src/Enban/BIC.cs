@@ -88,7 +88,8 @@ namespace Enban
         }
 
         /// <summary>
-        /// Tries to parse a given BIC string using <see cref="TryParse(string,out Enban.BIC)"/> with <see cref="BICStyles.Lenient"/>.
+        /// Tries to parse a given BIC string using <see cref="TryParse(string,BICStyles,out Enban.BIC)"/> with
+        /// <see cref="BICStyles.Lenient"/>.
         /// </summary>
         /// <param name="text">the BIC string to parse</param>
         /// <param name="parsed">the parsed BIC, if the format is valid</param>

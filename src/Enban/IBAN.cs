@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
+using Enban.Countries;
 using Enban.Text;
 
 namespace Enban
@@ -6,7 +8,7 @@ namespace Enban
     /// <summary>
     /// International Bank Account Number (or short: IBAN).
     /// </summary>
-    public struct IBAN : IFormattable, IEquatable<IBAN>
+    public class IBAN : IFormattable, IEquatable<IBAN>
     {
         /// <summary>
         /// The check digit of the IBAN. The check digit might be wrong, e.g. if it was constructed by
@@ -17,34 +19,63 @@ namespace Enban
         public int CheckDigit { get; }
 
         /// <summary>
-        /// The underlying <see cref="BBAN">basic bank account number</see>.
+        /// The bank account number
         /// </summary>
-        public BBAN BBAN { get; }
+        public string AccountNumber { get; }
+        
+        /// <summary>
+        /// The <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a> country code
+        /// </summary>
+        public string CountryCode { get; }
 
         /// <summary>
-        /// Constructs an IBAN, given an country's code, the actual bank account number and a check digit.
-        /// The structure of the account number gets checked, and malformed account numbers throw an
+        /// Constructs an IBAN. The structure of the account number gets checked, and malformed account numbers throw an
         /// <see cref="ArgumentException"/>.
         /// </summary>
-        /// <param name="countryCode">the country's ISO 3166-1 alpha-2 code</param>
-        /// <param name="bankAccountNumber">the actual account number</param>
-        /// <param name="checkDigit">the check digit</param>
+        /// <param name="iban">the IBAN</param>
         /// <exception cref="ArgumentException">if the account number is malformed</exception>
-        public IBAN(string countryCode, string bankAccountNumber, int checkDigit)
-            : this(new BBAN(countryCode, bankAccountNumber), checkDigit)
+        public IBAN(string iban)
+        {
+            if (IBANPattern.ParseAndValidate(iban, IBANStyles.Lenient, KnownCountryAccountPatterns, out var cc,
+                    out var cd, out var ac, out var error))
+            {
+                CountryCode = cc;
+                CheckDigit = cd;
+                AccountNumber = ac;
+            }
+            else
+            {
+                throw new ArgumentException(error, nameof(iban));
+            }
+        }
+
+        public IBAN(string countryCode, string accountNumber)
+            : this(countryCode, null, accountNumber)
         {
             
         }
 
-        /// <summary>
-        /// Constructs an IBAN, given an existing BBAN and its check digit.
-        /// </summary>
-        /// <param name="bankAccountNumber">the actual account number and the associated country, represented as a <see cref="BBAN"/></param>
-        /// <param name="checkDigit">the check digit</param>
-        public IBAN(BBAN bankAccountNumber, int checkDigit)
+        public IBAN(string countryCode, int checkDigit, string accountNumber)
+            : this(countryCode, (int?)checkDigit, accountNumber)
         {
-            CheckDigit = checkDigit;
-            BBAN = bankAccountNumber;
+        }
+
+        private IBAN(string countryCode, int? checkDigit, string accountNumber)
+        {
+            var formatInfo = KnownCountryAccountPatterns.Get(countryCode);
+            if (formatInfo == null)
+            {
+                throw new ArgumentException($"unsupported country code: {countryCode}");
+            }
+
+            if (!SegmentsMatcher.IsMatch(formatInfo.StructureInfo.Segments, accountNumber.ToCharArray()))
+            {
+                throw new ArgumentException($"invalid account number format: {accountNumber}");
+            }
+            
+            CountryCode = countryCode;
+            CheckDigit = checkDigit ?? CheckDigitUtil.Compute(countryCode, accountNumber);
+            AccountNumber = accountNumber;
         }
 
         /// <inheritdoc />
@@ -73,34 +104,52 @@ namespace Enban
         /// <summary>
         /// Verifies the validity of the check digit.
         /// </summary>
-        public bool CheckDigitValid => Country != null && CheckDigitUtil.IsValid(Country.Code, AccountNumber, CheckDigit);
-
+        public bool CheckDigitValid => CheckDigitUtil.IsValid(CountryCode, AccountNumber, CheckDigit);
+        
         /// <summary>
-        /// The country associated with this IBAN (and its underlying <see cref="BBAN"/>).
+        /// Tries to parse a given IBAN string using <see cref="TryParse(string,IBANStyles,out System.Nullable{Enban.IBAN})"/> with <see cref="IBANStyles.Lenient"/>.
         /// </summary>
-        public Country Country => BBAN.Country;
-
+        /// <param name="text">the BIC string to parse</param>
+        /// <param name="parsed">the parsed BIC, if the format is valid</param>
+        /// <returns>whether <paramref name="text"/> was parsed sucessfully</returns>
+        public static bool TryParse(string text, [NotNullWhen(true)] out IBAN? parsed)
+        {
+            return TryParse(text, IBANStyles.Lenient, out parsed);
+        }
+        
         /// <summary>
-        /// The code of the country associated with this IBAN (and its underlying <see cref="BBAN"/>).
+        /// Tries to parse a given BIC string.
         /// </summary>
-        public string CountryCode => BBAN.Country.Code;
+        /// <param name="text">the BIC string to parse</param>
+        /// <param name="style"></param>
+        /// <param name="parsed">the parsed BIC, if the format is valid</param>
+        /// <returns>whether <paramref name="text"/> was parsed sucessfully</returns>
+        public static bool TryParse(string text, IBANStyles style, [NotNullWhen(true)] out IBAN? parsed)
+        {
+            var isValid = IBANPattern.ParseAndValidate(text, style, KnownCountryAccountPatterns, out var cc, out var cd, out var ac, out _);
+            
+            if (isValid)
+            {
+                parsed = new IBAN(cc, cd, ac);
+                return true;
+            }
 
-        /// <summary>
-        /// The account number associated with this IBAN (and its underlying <see cref="BBAN"/>)
-        /// </summary>
-        public string AccountNumber => BBAN.AccountNumber;
+            parsed = null;
+            return false;
+        }
 
         /// <inheritdoc />
         public bool Equals(IBAN other)
         {
-            return CheckDigit.Equals(other.CheckDigit) && BBAN.Equals(other.BBAN);
+            return CheckDigit.Equals(other.CheckDigit) && CountryCode.Equals(other.CountryCode) &&
+                   AccountNumber.Equals(other.AccountNumber);
         }
 
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is IBAN && Equals((IBAN) obj);
+            return obj is IBAN iban && Equals(iban);
         }
 
         /// <inheritdoc />
@@ -108,8 +157,13 @@ namespace Enban
         {
             unchecked
             {
-                return (CheckDigit.GetHashCode() * 397) ^ BBAN.GetHashCode();
+                var hashCode = CountryCode.GetHashCode();
+                hashCode = (hashCode * 397) ^ CheckDigit.GetHashCode();
+                hashCode = (hashCode * 397) ^ AccountNumber.GetHashCode();
+                return hashCode;
             }
         }
+
+        public static CountryAccountPatterns KnownCountryAccountPatterns { get; } = new(PregeneratedCountryAccountPatterns.Default);
     }
 }

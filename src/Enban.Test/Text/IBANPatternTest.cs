@@ -36,7 +36,9 @@ namespace Enban.Test.Text
         {
             var parsed = IBANPattern.Electronic.Parse("DE89370400440532013000");
             Assert.True(parsed.Success);
-            Assert.Equal(new BBAN("DE", "370400440532013000").ToIBAN(89), parsed.Value);
+            Assert.Equal("DE", parsed.Value.CountryCode);
+            Assert.Equal(89, parsed.Value.CheckDigit);
+            Assert.Equal("370400440532013000", parsed.Value.AccountNumber);
         }
 
         [Fact]

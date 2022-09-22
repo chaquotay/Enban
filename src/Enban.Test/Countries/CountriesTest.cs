@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 using Enban.Text;
 using Xunit;
@@ -31,9 +32,7 @@ namespace Enban.Test.Countries
         [MemberData(nameof(Countries))]
         public void FormatElectronicIBAN(Example example)
         {
-            var countries = CountryProviders.Default;
-
-            var ibanText = new BBAN(countries[example.CountryCode], example.BBAN).ToIBAN().ToString("e", null);
+            var ibanText = new IBAN(example.CountryCode, example.BBAN).ToString("e", CultureInfo.InvariantCulture);
 
             Assert.Equal(example.IBANElectronic, ibanText);
         }
@@ -42,9 +41,7 @@ namespace Enban.Test.Countries
         [MemberData(nameof(Countries))]
         public void FormatPrintIBAN(Example example)
         {
-            var countries = CountryProviders.Default;
-
-            var ibanText = new BBAN(countries[example.CountryCode], example.BBAN).ToIBAN().ToString("p", null);
+            var ibanText = new IBAN(example.CountryCode, example.BBAN).ToString("p", CultureInfo.InvariantCulture);
 
             Assert.Equal(example.IBANPrint, ibanText);
         }

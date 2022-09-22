@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Enban.Text;
 using Xunit;
 
@@ -9,50 +10,50 @@ namespace Enban.Test
         [Fact]
         public void ToString_GivenPrintFormat_ThenPackedInSegmentsOfFourWithSmallerLastSegment()
         {
-            var iban = new BBAN("DE", "370400440532013000").ToIBAN(89);
+            var iban = new IBAN("DE89370400440532013000");
 
-            Assert.Equal("DE89 3704 0044 0532 0130 00", iban.ToString("p", null));
+            Assert.Equal("DE89 3704 0044 0532 0130 00", iban.ToString("p", CultureInfo.InvariantCulture));
         }
 
         [Fact]
         public void ToString_GivenPrintFormat_ThenPackedInSegmentsOfFour()
         {
-            var iban = new BBAN("LU", "0019400644750000").ToIBAN(28);
+            var iban = new IBAN("LU280019400644750000");
 
-            Assert.Equal("LU28 0019 4006 4475 0000", iban.ToString("p", null));
+            Assert.Equal("LU28 0019 4006 4475 0000", iban.ToString("p", CultureInfo.InvariantCulture));
         }
 
         [Fact]
         public void ToString_GivenElectonicFormat_ThenConcatenatedString()
         {
-            var iban = new BBAN("DE", "370400440532013000").ToIBAN(89);
+            var iban = new IBAN("DE89370400440532013000");
 
-            Assert.Equal("DE89370400440532013000", iban.ToString("e", null));
+            Assert.Equal("DE89370400440532013000", iban.ToString("e", CultureInfo.InvariantCulture));
         }
 
         [Fact]
         public void Construct_GivenCorrectFormat_ThenInstanceConstructed()
         {
-            var iban = new IBAN("DE", "370400440532013000", 89);
+            _ = new IBAN("DE89370400440532013000");
         }
 
         [Fact]
         public void Construct_GivenWrongFormat_ThenException()
         {
-            Assert.Throws<ArgumentException>(() => new IBAN("DE", "X70400440532013000", 89));
+            Assert.Throws<ArgumentException>(() => new IBAN("DE89X70400440532013000"));
         }
 
         [Fact]
         public void CheckDigitValid_GivenCorrectCheckDigit_ThenTrue()
         {
-            var iban = new BBAN("DE", "210501700012345678").ToIBAN(68);
+            var iban = new IBAN("DE68210501700012345678");
             Assert.True(iban.CheckDigitValid);
         }
 
         [Fact]
         public void CheckDigitValid_GivenWrongCheckDigit_ThenFalse()
         {
-            var iban = new BBAN("DE", "210501709012345678").ToIBAN(68);
+            var iban = new IBAN("DE68210501709012345678");
             Assert.False(iban.CheckDigitValid);
         }
 
@@ -71,12 +72,7 @@ namespace Enban.Test
         {
             var defaultIban = default(IBAN);
             
-            Assert.Equal(defaultIban, defaultIban);
-            Assert.Null(defaultIban.Country);
-            Assert.Null(defaultIban.AccountNumber);
-            Assert.Equal(0, defaultIban.CheckDigit);
-            Assert.False(defaultIban.CheckDigitValid);
-            _ = defaultIban.GetHashCode();
+            Assert.Null(defaultIban);
         }
     }
 }
