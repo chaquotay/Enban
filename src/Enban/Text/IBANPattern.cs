@@ -11,18 +11,25 @@ namespace Enban.Text
     {
         private readonly CountryAccountPatterns _countryAccountPatterns;
         private readonly IBANStyles _styles;
-        private readonly bool _addWhitespaces;
+        private readonly string _format;
 
-        private IBANPattern(IBANStyles styles, bool addWhitespaces, CountryAccountPatterns countryAccountPatterns)
+        private IBANPattern(IBANStyles styles, string format, CountryAccountPatterns countryAccountPatterns)
         {
             _countryAccountPatterns = countryAccountPatterns;
             _styles = styles;
-            _addWhitespaces = addWhitespaces;
+            _format = format;
         }
 
         /// <inheritdoc />
         public string Format(IBAN value)
         {
+            return Format(value, _format);
+        }
+        
+        internal static string Format(IBAN value, string format)
+        {
+            var addWhiteSpace = "p".Equals(format);
+            
             var accountNumber = value.AccountNumber;
             var countryCode = value.CountryCode;
             var checkDigit = value.CheckDigit;
@@ -38,7 +45,7 @@ namespace Enban.Text
 
             accountNumber.CopyTo(0, electronicChars, 4, accountNumber.Length);
 
-            if (_addWhitespaces)
+            if (addWhiteSpace)
             {
                 var rest = electronicChars.Length % 4;
                 var fullSegmentCount = electronicChars.Length / 4;
