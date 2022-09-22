@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 
 namespace Enban.Text
 {
@@ -63,5 +64,28 @@ namespace Enban.Text
             }
         }
 
+        public string ToPattern()
+        {
+            var patternText = new StringBuilder();
+            foreach (var segment in Segments)
+            {
+                patternText.Append(segment.Length);
+                if (segment.LengthIndication == LengthIndication.Fixed)
+                {
+                    patternText.Append('!');
+                }
+
+                patternText.Append(segment.CharacterClass switch
+                {
+                    CharacterClass.Digits => 'n',
+                    CharacterClass.AlphanumericCharacters => 'c',
+                    CharacterClass.UpperCaseLetters => 'a',
+                    CharacterClass.BlankSpace => 'e',
+                    _ => throw new InvalidOperationException()
+                });
+            }
+
+            return patternText.ToString();
+        }
     }
 }

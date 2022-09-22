@@ -9,7 +9,7 @@ namespace Enban
         /// Composite style which tries to be as "forgiving" as possible, e.g. by allowing leading and trailing
         /// white-spaces, accepting lower-case letters.
         /// </summary>
-        Lenient = IgnoreCase | AllowLeadingWhite | AllowTrailingWhite | AllowIntermediateWhite,
+        Lenient = IgnoreCase | AllowLeadingWhite | AllowTrailingWhite | AllowIntermediateWhite | AllowInvalidCheckDigit,
         
         /// <summary>
         /// Accept lower-case letters.
@@ -30,6 +30,8 @@ namespace Enban
         /// Allow intermediate white space
         /// </summary>
         AllowIntermediateWhite = 64,
+        
+        AllowInvalidCheckDigit = 128,
         
         Print = AllowIntermediateWhite,
         

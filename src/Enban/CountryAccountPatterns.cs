@@ -35,9 +35,21 @@ namespace Enban
             }
         }
 
+        public string? GetPattern(string countryCode)
+        {
+            if (_patterns.TryGetValue(countryCode, out var info))
+            {
+                return info.ToPattern();
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         internal void Add(string countryCode, AccountNumberFormatInfo pattern)
         {
-            _patterns[countryCode] = pattern;
+            _patterns.Add(countryCode, pattern);
         }
 
         internal AccountNumberFormatInfo? Get(string countryCode) => _patterns.TryGetValue(countryCode, out var info) ? info : null;
