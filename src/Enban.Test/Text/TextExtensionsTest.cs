@@ -47,9 +47,32 @@ namespace Enban.Test.Text
             TestRemoveWhitespaces("", "");
         }
 
+        [Theory]
+        [InlineData("Foobar", true, true, true, "Foobar")]
+        [InlineData("", true, true, true, "")]
+        [InlineData("", false, false, false, "")]
+        [InlineData("   Foo bar  ", true, true, true, "Foobar")]
+        [InlineData("   Foo bar  ", false, true, true, "   Foobar")]
+        [InlineData("   Foo bar  ", true, false, true, "Foo bar")]
+        [InlineData("   Foo bar  ", true, true, false, "Foobar  ")]
+        
+        [InlineData("   Foo bar  ", true, false, false, "Foo bar  ")]
+        [InlineData("   Foo bar  ", false, true, false, "   Foobar  ")]
+        [InlineData("   Foo bar  ", false, false, true, "   Foo bar")]
+        public void TestTestRemoveWhitespaces(string t, bool start, bool middle, bool end, string expected)
+        {
+            var actual = new string(t.ToTrimmedCharArray(start, middle, end));
+            Assert.Equal(expected, actual);
+        }
+
         private void TestRemoveWhitespaces(string t, string expected)
         {
-            var actual = new string(t.ToCharArray().RemoveWhitespaces());
+            TestRemoveWhitespaces(t, expected, true, true, true);
+        }
+        
+        private void TestRemoveWhitespaces(string t, string expected, bool start, bool middle, bool end)
+        {
+            var actual = new string(t.ToCharArray().Trim());
             Assert.Equal(expected, actual);
         }
     }

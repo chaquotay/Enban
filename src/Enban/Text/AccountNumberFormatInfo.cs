@@ -5,7 +5,7 @@ using System.Linq;
 namespace Enban.Text
 {
     /// <summary>
-    /// Provides format information about account numbers (BBAN/IBAN).
+    /// Provides format information about account numbers.
     /// </summary>
     internal class AccountNumberFormatInfo
     {

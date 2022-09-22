@@ -1,59 +1,23 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Enban.Countries;
 
 namespace Enban.Text
 {
     /// <summary>
     /// Implements the IBAN patterns, both <see cref="Electronic">electronic</see> and <see cref="Print">print</see>.
     /// </summary>
-    public sealed class IBANPattern : IPattern<IBAN>
+    public sealed partial class IBANPattern : IPattern<IBAN>
     {
-        private readonly IBANPatternType _type;
         private readonly CountryAccountPatterns _countryAccountPatterns;
         private readonly IBANStyles _styles;
+        private readonly bool _addWhitespaces;
 
-        /// <summary>
-        /// Creates a pattern instance (print or electronic), using the provided <see cref="ICountryProvider"/>.
-        /// </summary>
-        /// <param name="patternType">the pattern variant (<see cref="IBANPatternType.Electronic"/> or <see cref="IBANPatternType.Print"/>)</param>
-        /// <param name="countryAccountPatterns">country account patterns</param>
-        /// <returns>the constructed pattern instance</returns>
-        private static IBANPattern Create(IBANPatternType patternType, IBANStyles styles, CountryAccountPatterns countryAccountPatterns)
+        private IBANPattern(IBANStyles styles, bool addWhitespaces, CountryAccountPatterns countryAccountPatterns)
         {
-            return new IBANPattern(patternType, styles, countryAccountPatterns);
-        }
-
-        /// <summary>
-        /// Creates an electronic pattern instance, using the provided <see cref="ICountryProvider"/>.
-        /// </summary>
-        /// <param name="countryAccountPatterns">country account patterns</param>
-        /// <returns>the constructed pattern instance</returns>
-        public static IBANPattern CreateElectronic(CountryAccountPatterns countryAccountPatterns) => Create(IBANPatternType.Electronic, IBANStyles.Electronic, countryAccountPatterns);
-
-        /// <summary>
-        /// Provides an electronic pattern instance, using the <see cref="IBAN.KnownCountryAccountPatterns">default country provider</see>.
-        /// </summary>
-        public static IBANPattern Electronic { get; } = CreateElectronic(IBAN.KnownCountryAccountPatterns);
-
-        /// <summary>
-        /// Creates a print pattern instance, using the provided <see cref="ICountryProvider"/>.
-        /// </summary>
-        /// <param name="countryAccountPatterns">country account patterns</param>
-        /// <returns>the constructed pattern instance</returns>
-        public static IBANPattern CreatePrint(CountryAccountPatterns countryAccountPatterns) => Create(IBANPatternType.Print, IBANStyles.Print, countryAccountPatterns);
-
-        /// <summary>
-        /// Provides a print pattern instance, using the <see cref="CountryProviders.Default">default country provider</see>.
-        /// </summary>
-        public static IBANPattern Print { get; } = CreatePrint(IBAN.KnownCountryAccountPatterns);
-
-        private IBANPattern(IBANPatternType type, IBANStyles styles, CountryAccountPatterns countryAccountPatterns)
-        {
-            _type = type;
             _countryAccountPatterns = countryAccountPatterns;
             _styles = styles;
+            _addWhitespaces = addWhitespaces;
         }
 
         /// <inheritdoc />
@@ -74,7 +38,7 @@ namespace Enban.Text
 
             accountNumber.CopyTo(0, electronicChars, 4, accountNumber.Length);
 
-            if (_type == IBANPatternType.Print)
+            if (_addWhitespaces)
             {
                 var rest = electronicChars.Length % 4;
                 var fullSegmentCount = electronicChars.Length / 4;
@@ -131,18 +95,18 @@ namespace Enban.Text
 
         internal static bool ParseAndValidate(string text, IBANStyles style, CountryAccountPatterns countryAccountPatterns, out string countryCode, out int checkDigit, out string accountNumber, [NotNullWhen(false)] out string? error)
         {
-            text = Normalize(text, style);
-
             countryCode = "";
             checkDigit = 0;
             accountNumber = "";
             error = null;
-            
+
             if (string.IsNullOrWhiteSpace(text))
             {
                 error = "text is null or empty";
                 return false;
             }
+            
+            text = Normalize(text, style);
             
             if (text.Length < 5) // two characters for country coude, two characters for check digit, at least one char for account number
             {
@@ -193,7 +157,7 @@ namespace Enban.Text
                 s = s.TrimEnd();
 
             if (style.HasFlag(IBANStyles.AllowIntermediateWhite))
-                s = new string(s.ToArray().RemoveWhitespaces());
+                s = new string(s.ToArray().Trim());
 
             if (style.HasFlag(IBANStyles.IgnoreCase))
                 s = s.ToUpperInvariant();
