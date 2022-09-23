@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 
 namespace Enban.Text
 {
@@ -12,48 +11,34 @@ namespace Enban.Text
     internal struct Segment : IEquatable<Segment>
     {
         private readonly CharacterClass _characterClass;
-        private readonly short _length;
         private readonly LengthIndication _lengthIndication;
 
         public CharacterClass CharacterClass => _characterClass;
 
-        public short Length => _length;
-
         public LengthIndication LengthIndication => _lengthIndication;
 
-        public Segment(CharacterClass characterClass, short length, LengthIndication lengthIndication)
+        public Segment(CharacterClass characterClass, LengthIndication lengthIndication)
         {
             _characterClass = characterClass;
-            _length = length;
             _lengthIndication = lengthIndication;
         }
 
+        /// <summary>
+        /// Invokes <see cref="ToPattern"/>
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() => ToPattern();
 
-        public string ToPattern()
-        {
-            var patternText = new StringBuilder();
-            patternText.Append(Length);
-            if (LengthIndication == LengthIndication.Fixed)
-            {
-                patternText.Append('!');
-            }
-
-            patternText.Append(CharacterClass switch
-            {
-                CharacterClass.Digits => 'n',
-                CharacterClass.AlphanumericCharacters => 'c',
-                CharacterClass.UpperCaseLetters => 'a',
-                CharacterClass.BlankSpace => 'e',
-                _ => throw new InvalidOperationException()
-            });
-
-            return patternText.ToString();
-        }
+        /// <summary>
+        /// Converts this segment into the equivalent pattern string (e.g. <em>"4!n5!c"</em>)
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public string ToPattern() => $"{LengthIndication}{CharacterClass}";
 
         public bool Equals(Segment other)
         {
-            return _characterClass == other._characterClass && _length == other._length && _lengthIndication == other._lengthIndication;
+            return _characterClass == other._characterClass && _lengthIndication == other._lengthIndication;
         }
 
         public override bool Equals(object obj)
@@ -65,9 +50,8 @@ namespace Enban.Text
         {
             unchecked
             {
-                var hashCode = (int)_characterClass;
-                hashCode = (hashCode * 397) ^ _length;
-                hashCode = (hashCode * 397) ^ (int)_lengthIndication;
+                var hashCode = _characterClass.GetHashCode();
+                hashCode = (hashCode * 397) ^ _lengthIndication.GetHashCode();
                 return hashCode;
             }
         }
@@ -142,34 +126,21 @@ namespace Enban.Text
                 let isFixed = count.EndsWith("!")
                 let num = isFixed ? count.Substring(0, count.Length - 1) : count.Substring(0, count.Length)
                 let parsedNum = short.Parse(num)
-                select new Tuple<short, LengthIndication>(parsedNum,
-                    isFixed ? LengthIndication.Fixed : LengthIndication.Maximum)
+                select isFixed ? LengthIndication.Fixed(parsedNum) : LengthIndication.Maximum(parsedNum)
             ).ToList();
 
             var chars = (
                 from System.Text.RegularExpressions.Capture capture in match.Groups["CHAR"].Captures
-                let charClass = ToChararcterClass(capture.Value[0])
-                where charClass.HasValue
-                select charClass.Value
+                let charClass = CharacterClass.FromSymbol(capture.Value[0])
+                where charClass != null
+                select (CharacterClass)charClass
             ).ToList();
 
             if (chars.Count != counts.Count) // invalid char class!?!
                 return false;
 
-            segments = counts.Zip(chars, (cnt, chr) => new Segment(chr, cnt.Item1, cnt.Item2)).ToArray();
+            segments = counts.Zip(chars, (cnt, chr) => new Segment(chr, cnt)).ToArray();
             return true;
-
-            CharacterClass? ToChararcterClass(char c)
-            {
-                return c switch
-                {
-                    'n' => CharacterClass.Digits,
-                    'c' => CharacterClass.AlphanumericCharacters,
-                    'a' => CharacterClass.UpperCaseLetters,
-                    'e' => CharacterClass.BlankSpace,
-                    _ => null
-                };
-            }
         }
     }
 }

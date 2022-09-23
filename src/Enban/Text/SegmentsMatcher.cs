@@ -18,7 +18,7 @@ namespace Enban.Text
             for (var i = 0; i < segmentsCount; i++)
             {
                 var segment = segments[i];
-                var segmentLength = segment.Length;
+                var segmentLength = segment.LengthIndication.Length;
                 expectedLen += segmentLength;
             }
 
@@ -29,7 +29,7 @@ namespace Enban.Text
             {
                 var segment = segments[i];
                 var segmentCharacterClass = segment.CharacterClass;
-                var segmentLength = segment.Length;
+                var segmentLength = segment.LengthIndication.Length;
 
                 for (var segOffset = 0; segOffset < segmentLength; segOffset++)
                 {
