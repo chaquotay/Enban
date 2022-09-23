@@ -1,7 +1,12 @@
 ﻿using System;
+using Enban.Text;
 
 namespace Enban
 {
+    /// <summary>
+    /// Determines the styles permitted in BIC string arguments that are passed to <see cref="BICPattern.Parse" /> and
+    /// <see cref="BIC.TryParse(string,BICStyles,out Enban.BIC?)" />
+    /// </summary>
     [Flags]
     public enum BICStyles
     {

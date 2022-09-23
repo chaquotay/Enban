@@ -49,12 +49,28 @@ namespace Enban
             }
         }
 
+        /// <summary>
+        /// Constructs an IBAN from a given <paramref name="countryCode"/> and <paramref name="accountNumber"/>.
+        /// The corresponding <see cref="CheckDigit"/> is calculated automatically.
+        /// </summary>
+        /// <param name="countryCode">ISO 3166-2 country code</param>
+        /// <param name="accountNumber">the account number</param>
+        /// <exception cref="ArgumentException">if the <paramref name="countryCode"/> is not supported or the <paramref name="accountNumber"/> does not conform to the account number format of the specified country.</exception>
         public IBAN(string countryCode, string accountNumber)
             : this(countryCode, null, accountNumber)
         {
             
         }
 
+        /// <summary>
+        /// Constructs an IBAN from a given <paramref name="countryCode"/>, <paramref name="checkDigit"/> and
+        /// <paramref name="accountNumber"/>. The <paramref name="checkDigit"/> is not validated. In order to verify
+        /// if the specified <paramref name="checkDigit"/> is valid you have to check <see cref="CheckDigitValid"/>.
+        /// </summary>
+        /// <param name="countryCode">ISO 3166-2 country code</param>
+        /// <param name="checkDigit">the check digit</param>
+        /// <param name="accountNumber">the account number</param>
+        /// <exception cref="ArgumentException">if the <paramref name="countryCode"/> is not supported or the <paramref name="accountNumber"/> does not conform to the account number format of the specified country.</exception>
         public IBAN(string countryCode, int checkDigit, string accountNumber)
             : this(countryCode, (int?)checkDigit, accountNumber)
         {
@@ -106,7 +122,7 @@ namespace Enban
         public bool CheckDigitValid => CheckDigitUtil.IsValid(CountryCode, AccountNumber, CheckDigit);
         
         /// <summary>
-        /// Tries to parse a given IBAN string using <see cref="TryParse(string,IBANStyles,out System.Nullable{Enban.IBAN})"/> with <see cref="IBANStyles.Lenient"/>.
+        /// Tries to parse a given IBAN string using <see cref="TryParse(string,IBANStyles,out Enban.IBAN?)"/> with <see cref="IBANStyles.Lenient"/>.
         /// </summary>
         /// <param name="text">the BIC string to parse</param>
         /// <param name="parsed">the parsed BIC, if the format is valid</param>

@@ -1,7 +1,12 @@
 ﻿using System;
+using Enban.Text;
 
 namespace Enban
 {
+    /// <summary>
+    /// Determines the styles permitted in IBAN string arguments that are passed to <see cref="IBANPattern.Parse" /> and
+    /// <see cref="IBAN.TryParse(string,IBANStyles,out Enban.IBAN?)" />
+    /// </summary>
     [Flags]
     public enum IBANStyles
     {
@@ -31,10 +36,19 @@ namespace Enban
         /// </summary>
         AllowIntermediateWhite = 64,
         
+        /// <summary>
+        /// Allows invalid check digits
+        /// </summary>
         AllowInvalidCheckDigit = 128,
         
+        /// <summary>
+        /// Strict style which only allows intermediate white-space used in the IBAN 'print' pattern
+        /// </summary>
         Print = AllowIntermediateWhite,
         
+        /// <summary>
+        /// Strictest style which does not allow white-space or lower-case characters
+        /// </summary>
         Electronic = 0,
     }
 }

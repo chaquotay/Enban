@@ -1,8 +1,8 @@
 ﻿namespace Enban
 {
     /// <summary>
-    /// This namespace contains the main types of the Enban library, especially the <see cref="BBAN"/>
-    /// and <see cref="IBAN"/> structs, and types for the handling of countries.
+    /// This namespace contains the main types of the Enban library, especially the <see cref="IBAN"/>
+    /// and <see cref="BIC"/> classes.
     /// </summary>
     internal class NamespaceDoc
     {

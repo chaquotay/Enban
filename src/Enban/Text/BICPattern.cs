@@ -4,13 +4,16 @@ using System.Linq;
 
 namespace Enban.Text
 {
+    /// <summary>
+    /// Implements the BIC patterns, both <see cref="Full">electronic</see> and <see cref="Compact">print</see>.
+    /// </summary>
     public sealed partial class BICPattern : IPattern<BIC>
     {
         private readonly BICStyles _styles;
         private readonly string _format;
         private readonly Predicate<string> _isKnownCountryCode;
 
-        public BICPattern(BICStyles styles = BICStyles.Lenient, string format="c", Predicate<string>? isKnownCountryCode = null)
+        private BICPattern(BICStyles styles = BICStyles.Lenient, string format="c", Predicate<string>? isKnownCountryCode = null)
         {
             _styles = styles;
             _format = format;
