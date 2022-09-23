@@ -35,7 +35,7 @@ foreach (var countryNode in GetCountries(countriesPath))
     {
         var segmentsText = string.Join(",\r\n",
             segments.Select(segment =>
-                $"new Text.Segment(Text.CharacterClass.{segment.CharacterClass.Name}, Text.LengthIndication.{segment.LengthIndication.Name})"));
+                $"new Text.Segment({segment.CharacterClass.CodeExpression}, {segment.LengthIndication.CodeExpression})"));
         source.AppendLine(segmentsText);
     }
     

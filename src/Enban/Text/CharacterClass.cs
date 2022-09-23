@@ -1,91 +1,106 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+using System.Linq;
 
 namespace Enban.Text
 {
-    internal class CharacterClass : IEquatable<CharacterClass>
+    internal readonly struct CharacterClass : IEquatable<CharacterClass>
     {
-        private readonly Predicate<char> _contains;
-        public char Symbol { get; }
-        public string Name { get; }
+        private readonly short _classIndex;
 
-        private static readonly Dictionary<char, CharacterClass> CharacterClasses = new();
+        private static readonly char[] ClassSymbolsByIndex = { 'n','a','c','e' };
 
-        private CharacterClass(char symbol, string name, Predicate<char> contains)
+        private static readonly Dictionary<char, short> ClassIndicesBySymbol = ClassSymbolsByIndex
+            .Select((s, i) => (Symbol: s, Index: (short)i))
+            .ToDictionary(t => t.Symbol, t => t.Index);
+        
+        private static readonly string[] CodeExpressionsByIndex = new string[]{
+            nameof(Digits),
+            nameof(UpperCaseLetters),
+            nameof(AlphanumericCharacters),
+            nameof(BlankSpace),
+        }.Select(m => $"{typeof(CharacterClass).FullName}.{m}").ToArray();
+
+        private static readonly Predicate<char>[] ClassPredicatesByIndex =
         {
-            _contains = contains;
-            Symbol = symbol;
-            Name = name;
+            IsDigit,
+            IsUpperCaseLetters,
+            IsAlphanumericCharacters,
+            IsBlankSpace
+        };
+
+        public string CodeExpression => CodeExpressionsByIndex[_classIndex];
+
+        private CharacterClass(short classIndex)
+        {
+            _classIndex = classIndex;
         }
+        
+        public override string ToString() => ClassSymbolsByIndex[_classIndex].ToString();
 
-        public override string ToString() => Symbol.ToString();
-
-        public bool Contains(char c) => _contains.Invoke(c);
+        public bool Contains(char c) => ClassPredicatesByIndex[_classIndex].Invoke(c);
 
         /// <summary>
         /// Digits (numeric characters 0 to 9 only), characters representation 'n'.
         /// </summary>
-        public static readonly CharacterClass Digits = CreateAndRegister('n', c => c is not (< '0' or > '9'));
-        
+        public static readonly CharacterClass Digits = Create('n');
+
+        private static bool IsDigit(char c)
+        {
+            return c is not (< '0' or > '9');
+        }
+
         /// <summary>
         /// Upper case letters (alphabetic characters A-Z only), characters representation 'a'.
         /// </summary>
-        public static readonly CharacterClass UpperCaseLetters = CreateAndRegister('a', c => c is not (< 'A' or > 'Z'));
-        
+        public static readonly CharacterClass UpperCaseLetters = Create('a');
+
+        private static bool IsUpperCaseLetters(char c)
+        {
+            return c is not (< 'A' or > 'Z');
+        }
+
         /// <summary>
         /// Upper and lower case alphanumeric characters (A-Z, a-z and 0-9), characters representation 'c'.
         /// </summary>
-        public static readonly CharacterClass AlphanumericCharacters = CreateAndRegister('c', c => c is not ((< '0' or > '9') and (< 'A' or > 'Z') and (< 'a' or > 'z')));
+        public static readonly CharacterClass AlphanumericCharacters = Create('c');
+
+        private static bool IsAlphanumericCharacters(char c)
+        {
+            return c is not ((< '0' or > '9') and (< 'A' or > 'Z') and (< 'a' or > 'z'));
+        }
 
         /// <summary>
         /// Blank space, characters representation 'e'.
         /// </summary>
-        public static readonly CharacterClass BlankSpace = CreateAndRegister('e', c => c == ' ');
+        public static readonly CharacterClass BlankSpace = Create('e');
+
+        private static bool IsBlankSpace(char c) => c == ' ';
 
         public static CharacterClass? FromSymbol(char symbol)
         {
-            return CharacterClasses.TryGetValue(symbol, out var cc) ? cc : null;
+            return ClassIndicesBySymbol.TryGetValue(symbol, out var index) ? new CharacterClass(index) : null;
         }
 
-        private static CharacterClass CreateAndRegister(char symbol, Predicate<char> contains, [CallerMemberName] string? name = null)
+        private static CharacterClass Create(char symbol) => FromSymbol(symbol) ?? throw new ArgumentException($"unknown symbol: {symbol}", nameof(symbol));
+
+        public static bool operator ==(CharacterClass x, CharacterClass y)
         {
-            if (name==null || string.IsNullOrEmpty(name))
-                throw new ArgumentException("name is empty", nameof(name));
-            
-            return CharacterClasses[symbol] = new CharacterClass(symbol, name, contains);
+            return x.Equals(y);
         }
 
-        public static bool operator ==(CharacterClass? x, CharacterClass? y)
-        {
-            if (ReferenceEquals(x, y)) return true;
-            if (ReferenceEquals(x, null) || ReferenceEquals(y, null)) return false;
-            return x.Symbol == y.Symbol;
-        }
-
-        public static bool operator !=(CharacterClass? x, CharacterClass? y)
+        public static bool operator !=(CharacterClass x, CharacterClass y)
         {
             return !(x == y);
         }
 
-        public bool Equals(CharacterClass? other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Symbol == other.Symbol;
-        }
+        public bool Equals(CharacterClass other) => _classIndex == other._classIndex;
 
-        public override bool Equals(object? obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((CharacterClass)obj);
-        }
+        public override bool Equals(object? obj) => obj is CharacterClass characterClass && Equals(characterClass);
 
         public override int GetHashCode()
         {
-            return Symbol.GetHashCode();
+            return _classIndex.GetHashCode();
         }
     }
 }
