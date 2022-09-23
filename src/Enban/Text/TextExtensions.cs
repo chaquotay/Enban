@@ -4,19 +4,14 @@ namespace Enban.Text
 {
     internal static class TextExtensions
     {
-        public static char[] Trim(this char[] text)
-        {
-            return text.Trim(true, true, true);
-        }
-        
-        private static bool IsWhitespace(char c)
-        {
-            return c == ' ' || c == '\t';
-        }
-
         public static char[] ToTrimmedCharArray(this string s, bool trimStart, bool trimMiddle, bool trimEnd)
         {
             return Trim(s.ToCharArray(), trimStart, trimMiddle, trimEnd);
+        }
+        
+        public static char[] Trim(this char[] text)
+        {
+            return text.Trim(true, true, true);
         }
         
         public static char[] Trim(this char[] text, bool trimStart, bool trimMiddle, bool trimEnd)
@@ -113,6 +108,11 @@ namespace Enban.Text
                 }
                 return chars.Length;
             }
+        }
+        
+        private static bool IsWhitespace(char c)
+        {
+            return c == ' ' || c == '\t';
         }
     }
 }

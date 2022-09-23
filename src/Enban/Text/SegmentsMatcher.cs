@@ -34,21 +34,8 @@ namespace Enban.Text
                 for (var segOffset = 0; segOffset < segmentLength; segOffset++)
                 {
                     var c = chars[offset++];
-                    if (segmentCharacterClass == CharacterClass.Digits)
-                    {
-                        if (c < '0' || c > '9')
-                            return false;
-                    } else if (segmentCharacterClass == CharacterClass.UpperCaseLetters)
-                    {
-                        if (c < 'A' || c > 'Z')
-                            return false;
-                    } else if (segmentCharacterClass == CharacterClass.AlphanumericCharacters)
-                    {
-                        if ((c < '0' || c > '9') && (c < 'A' || c > 'Z') && (c < 'a' || c > 'z'))
-                        {
-                            return false;
-                        }
-                    }
+                    if (!segmentCharacterClass.Contains(c))
+                        return false;
                 }
             }
 
