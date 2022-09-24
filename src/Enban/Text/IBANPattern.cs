@@ -146,7 +146,7 @@ namespace Enban.Text
                 {
                     accountNumber = new string(chars, 4, chars.Length - 4);
                     
-                    if (style.HasFlag(IBANStyles.AllowInvalidCheckDigit) || CheckDigitUtil.IsValid(countryCode, accountNumber, checkDigit))
+                    if (style.HasFlagFast(IBANStyles.AllowInvalidCheckDigit) || CheckDigitUtil.IsValid(countryCode, accountNumber, checkDigit))
                     {
                         return true;
                     }
@@ -164,12 +164,12 @@ namespace Enban.Text
         
         private static char[] ToNormalizedCharArray(string s, IBANStyles style)
         {
-            if (style.HasFlag(IBANStyles.IgnoreCase))
+            if (style.HasFlagFast(IBANStyles.IgnoreCase))
                 s = s.ToUpperInvariant();
             
-            var trimStart = style.HasFlag(IBANStyles.AllowLeadingWhite);
-            var trimMiddle = style.HasFlag(IBANStyles.AllowIntermediateWhite);
-            var trimEnd = style.HasFlag(IBANStyles.AllowTrailingWhite);
+            var trimStart = style.HasFlagFast(IBANStyles.AllowLeadingWhite);
+            var trimMiddle = style.HasFlagFast(IBANStyles.AllowIntermediateWhite);
+            var trimEnd = style.HasFlagFast(IBANStyles.AllowTrailingWhite);
 
             return s.ToTrimmedCharArray(trimStart, trimMiddle, trimEnd);
         }

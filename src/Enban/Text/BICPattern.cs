@@ -89,7 +89,7 @@ namespace Enban.Text
             {
                 branchCode = "XXX";
 
-                if (style.HasFlag(BICStyles.RequirePrimaryOfficeBranchCode))
+                if (style.HasFlagFast(BICStyles.RequirePrimaryOfficeBranchCode))
                 {
                     error = "primary branch code is missing";
                     return false;
@@ -99,7 +99,7 @@ namespace Enban.Text
             {
                 branchCode = "XXX";
 
-                if (style.HasFlag(BICStyles.DisallowPrimaryOfficeBranchCode))
+                if (style.HasFlagFast(BICStyles.DisallowPrimaryOfficeBranchCode))
                 {
                     error = "primary branch code is present, but not allowed";
                     return false;
@@ -123,15 +123,15 @@ namespace Enban.Text
             return false;
         }
         
-        private static string Normalize(string s, BICStyles style)
+        private static string Normalize(string s, BICStyles style) // TODO: char[]? ToTrimmedCharArray()?
         {
-            if (style.HasFlag(BICStyles.AllowLeadingWhite))
+            if (style.HasFlagFast(BICStyles.AllowLeadingWhite))
                 s = s.TrimStart();
 
-            if (style.HasFlag(BICStyles.AllowTrailingWhite))
+            if (style.HasFlagFast(BICStyles.AllowTrailingWhite))
                 s = s.TrimEnd();
 
-            if (style.HasFlag(BICStyles.IgnoreCase))
+            if (style.HasFlagFast(BICStyles.IgnoreCase))
                 s = s.ToUpperInvariant();
                 
             return s;
