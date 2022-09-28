@@ -52,11 +52,11 @@ namespace Enban.Text
                 out var bc, out var error);
             if (valid)
             {
-                return ParseResult<BIC>.ForSuccess(new BIC(ic, cc, lc, bc));
+                return ParseResult<BIC>.ForValue(new BIC(ic, cc, lc, bc));
             }
             else
             {
-                return ParseResult<BIC>.ForFailure(new ArgumentException(error, nameof(text)));
+                return ParseResult<BIC>.ForException(new ArgumentException(error, nameof(text)));
             }
         }
         

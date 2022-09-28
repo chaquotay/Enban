@@ -72,22 +72,23 @@ namespace Enban.Text
             }
         }
 
-        internal static ParseResult<T> ForSuccess(T value)
+        internal static ParseResult<T> ForValue(T value)
         {
             return new SuccessResult(value);
         }
         
         private class FailureResult : ParseResult<T>
         {
-            private readonly Exception _exception;
+            private readonly Func<Exception> _exception;
 
-            public FailureResult(Exception exception)
+            public FailureResult(Func<Exception> exception)
             {
                 _exception = exception;
             }
             
             public override bool Success => false;
-            public override T GetValueOrThrow() => throw _exception;
+            public override Exception Exception => _exception.Invoke(); 
+            public override T GetValueOrThrow() => throw _exception.Invoke();
             public override bool TryGetValue(T failureValue, out T result)
             {
                 result = failureValue;
@@ -95,9 +96,8 @@ namespace Enban.Text
             }
         }
 
-        internal static ParseResult<T> ForFailure(Exception ex)
-        {
-            return new FailureResult(ex);
-        }
+        internal static ParseResult<T> ForException(Exception ex) => ForException(() => ex);
+        
+        internal static ParseResult<T> ForException(Func<Exception> ex) => new FailureResult(ex);
     }
 }

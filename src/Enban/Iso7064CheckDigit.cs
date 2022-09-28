@@ -5,7 +5,7 @@ namespace Enban
 {
     internal class Iso7064CheckDigit
     {
-        public static Iso7064CheckDigit Mod97 { get; } = new Iso7064CheckDigit(97);
+        public static Iso7064CheckDigit Mod97 { get; } = new(97);
 
         private static readonly BigInteger[] PowersOfTen = new BigInteger[18];
 
@@ -42,34 +42,33 @@ namespace Enban
 
         private static BigInteger ToNumber(string num)
         {
-            long[] parts = new long[8];
-            int[] partDigitsArr = new int[8];
+            var parts = new long[8];
+            var partDigitsArr = new int[8];
             var partIndex = 0;
             var partDigits = 0;
             var partDigitsThreshold = 16;
 
             foreach(var c in num)
             {
-
-                long dec = parts[partIndex];
-                if (c >= '0' && c <= '9')
+                var dec = parts[partIndex];
+                if (c is >= '0' and <= '9')
                 {
                     dec = dec * 10 + (c - '0');
                     partDigits++;
                 }
-                else if(c>='A' && c<='J')
+                else if(c is >= 'A' and <= 'J')
                 {
                     dec = dec * 10 + 1;
                     dec = dec * 10 + (c - 'A');
                     partDigits += 2;
                 }
-                else if (c >= 'K' && c <= 'T')
+                else if (c is >= 'K' and <= 'T')
                 {
                     dec = dec * 10 + 2;
                     dec = dec * 10 + (c - 'K');
                     partDigits += 2;
                 }
-                else if (c >= 'U' && c <= 'Z')
+                else if (c is >= 'U' and <= 'Z')
                 {
                     dec = dec * 10 + 3;
                     dec = dec * 10 + (c - 'U');
@@ -92,11 +91,11 @@ namespace Enban
             var result = BigInteger.Zero;
             for (var i = 0; i <= partIndex-1; i++)
             {
-                result = result * PowersOfTen[partDigitsArr[i]];
+                result *= PowersOfTen[partDigitsArr[i]];
                 result += parts[i];
             }
 
-            result = result * PowersOfTen[partDigits];
+            result *= PowersOfTen[partDigits];
             result += parts[partIndex];
 
             return result;

@@ -100,8 +100,8 @@ namespace Enban.Text
         {
             return ParseAndValidate(text, _styles, _countryAccountPatterns, out var cc, out var cd,
                 out var ac, out var error)
-                ? ParseResult<IBAN>.ForSuccess(new IBAN(cc, cd, ac))
-                : ParseResult<IBAN>.ForFailure(new FormatException(error));
+                ? ParseResult<IBAN>.ForValue(new IBAN(cc, cd, ac))
+                : ParseResult<IBAN>.ForException(new FormatException(error));
         }
 
         internal static bool ParseAndValidate(string text, IBANStyles style, CountryAccountPatterns countryAccountPatterns, out string countryCode, out int checkDigit, out string accountNumber, [NotNullWhen(false)] out string? error)

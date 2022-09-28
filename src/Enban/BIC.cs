@@ -65,7 +65,7 @@ namespace Enban
         /// <returns>the formatted BIC</returns>
         public override string ToString()
         {
-            return BICPattern.Format(this, "c");
+            return ToString("c", null);
         }
         
         /// <summary>

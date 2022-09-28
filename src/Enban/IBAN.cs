@@ -96,18 +96,7 @@ namespace Enban
         /// <inheritdoc />
         public string ToString(string format, IFormatProvider formatProvider)
         {
-            var pattern = IBANPattern.Electronic;
-
-            if ("e".Equals(format) || string.IsNullOrEmpty(format) || "G".Equals(format))
-            {
-                pattern = IBANPattern.Electronic;
-            }
-            else if ("p".Equals(format))
-            {
-                pattern = IBANPattern.Print;
-            }
-
-            return pattern.Format(this);
+            return IBANPattern.Format(this, format);
         }
 
         /// <inheritdoc />
