@@ -47,8 +47,8 @@
     <StartupObject />
     <Authors>Stephan Müller</Authors>
     <Version>1.0.1</Version>
-    <PackageVersion>1.0.1</PackageVersion>
-    <Description>Enban is an IBAN/BBAN API for .NET, including parsing, validation and formatting.</Description>
+    <PackageVersion>2.0.0-beta.1</PackageVersion>
+    <Description>Enban is an IBAN/BIC API for .NET, including parsing, validation and formatting.</Description>
     <Copyright>Copyright 2022</Copyright>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
