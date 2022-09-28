@@ -5,7 +5,7 @@ using Enban.Text;
 namespace Enban
 {
     /// <summary>
-    /// A <em>Business Identifier Code</em> according to <a href="https://en.wikipedia.org/wiki/ISO_9362">ISO 9362</a>
+    /// A <em>Business Identifier Code</em> according to <a href="https://en.wikipedia.org/wiki/ISO_9362">ISO 9362</a>.
     /// </summary>
     public class BIC : IFormattable, IEquatable<BIC>
     {

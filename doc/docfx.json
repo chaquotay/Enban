@@ -19,7 +19,9 @@
       {
         "files": [
           "api/**.yml",
-          "api/index.md"
+          "api/index.md",
+          "index.md",
+          "toc.yml"
         ]
       }
     ],
@@ -41,6 +43,9 @@
         ]
       }
     ],
+    "globalMetadata": {
+      "_appLogoPath": "images/icon_white_small.png"
+    },
     "dest": "_site",
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
@@ -54,4 +59,5 @@
     "cleanupCacheHistory": false,
     "disableGitFeatures": false
   }
+
 }

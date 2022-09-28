@@ -1,5 +1,7 @@
-- name: Articles
-  href: articles/
-- name: Api Documentation
+- name: API Documentation
   href: api/
   homepage: api/index.md
+- name: GitHub
+  href: https://github.com/chaquotay/Enban
+- name: NuGet
+  href: https://www.nuget.org/packages/Enban

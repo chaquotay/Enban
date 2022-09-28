@@ -1,6 +1,6 @@
 # Enban
 
-Enban is an IBAN/BBAN API for .NET, including parsing, validation and formatting.
+Enban is an IBAN/BIC API for .NET, including parsing, validation and formatting.
 
 ## Usage
 

@@ -25,6 +25,7 @@ class Build : NukeBuild
     [GitRepository] readonly GitRepository GitRepository;
 
     [Parameter("nuget.org API key", Name = "apikey")] string ApiKey;
+    [Parameter("serve docfx documentation", Name = "docserve")] bool DocServe;
 
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath OutputDirectory => RootDirectory / "output";
@@ -80,9 +81,14 @@ class Build : NukeBuild
         .DependsOn(Compile)
         .Executes(() =>
         {
+            DocFXMetadata(s => s
+                .SetProjects(Solution.GetProject("Enban"))
+                .SetOutputFolder(DocFXDirectory / "api"));
+            
             DocFXBuild(s => s
                 .SetConfigFile(DocFXDirectory / "docfx.json")
-                .SetOutputFolder(OutputDirectory / "doc"));
+                .SetOutputFolder(OutputDirectory / "doc")
+                .SetServe(DocServe));
         });
 
     Target Push => _ => _
