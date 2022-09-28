@@ -5,9 +5,11 @@ using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
+using Nuke.Common.Tools.DocFX;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Utilities.Collections;
 using static Nuke.Common.IO.FileSystemTasks;
+using static Nuke.Common.Tools.DocFX.DocFXTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 [CheckBuildProjectConfigurations]
@@ -27,6 +29,7 @@ class Build : NukeBuild
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath OutputDirectory => RootDirectory / "output";
     AbsolutePath TestResultsDirectory = RootDirectory / "output" / "test-results";
+    AbsolutePath DocFXDirectory => RootDirectory / "doc";
 
     Target Clean => _ => _
         .Before(Restore)
@@ -71,6 +74,15 @@ class Build : NukeBuild
                 .SetOutputDirectory(OutputDirectory)
                 .SetConfiguration(Configuration)
                 .SetProject(Solution.GetProject("Enban")));
+        });
+
+    Target Doc => _ => _
+        .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DocFXBuild(s => s
+                .SetConfigFile(DocFXDirectory / "docfx.json")
+                .SetOutputFolder(OutputDirectory / "doc"));
         });
 
     Target Push => _ => _

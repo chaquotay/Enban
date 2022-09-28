@@ -13,4 +13,8 @@
     <PackageReference Include="Nuke.Common" Version="5.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageDownload Include="docfx.console" Version="[2.59.4]" />
+  </ItemGroup>
+
 </Project>
