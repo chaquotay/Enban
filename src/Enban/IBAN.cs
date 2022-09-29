@@ -8,7 +8,7 @@ namespace Enban
     /// <summary>
     /// International Bank Account Number (or short: IBAN).
     /// </summary>
-    public class IBAN : IFormattable, IEquatable<IBAN>
+    public class IBAN : IFormattable, IEquatable<IBAN>, IComparable<IBAN>, IComparable
     {
         /// <summary>
         /// The check digit of the IBAN. The check digit might be wrong, e.g. if it was constructed by
@@ -141,12 +141,58 @@ namespace Enban
             parsed = null;
             return false;
         }
+        
+        public static bool operator ==(IBAN x, IBAN y)
+        {
+            if (ReferenceEquals(x, y))
+                return true;
+
+            if (ReferenceEquals(x, null))
+                return false;
+
+            if (ReferenceEquals(y, null))
+                return false;
+
+            return x.Equals(y);
+        }
+
+        public static bool operator !=(IBAN x, IBAN y)
+        {
+            return !(x == y);
+        }
 
         /// <inheritdoc />
         public bool Equals(IBAN other)
         {
             return CheckDigit.Equals(other.CheckDigit) && CountryCode.Equals(other.CountryCode) &&
                    AccountNumber.Equals(other.AccountNumber);
+        }
+
+        public int CompareTo(IBAN other)
+        {
+            int cmp;
+            
+            cmp = string.Compare(CountryCode, other.CountryCode, StringComparison.Ordinal);
+            if (cmp != 0)
+                return cmp;
+
+            cmp = CheckDigit.CompareTo(other.CheckDigit);
+            if (cmp != 0)
+                return cmp;
+            
+            cmp = String.Compare(AccountNumber, other.AccountNumber, StringComparison.Ordinal);
+            if (cmp != 0)
+                return cmp;
+            
+            return 0;
+        }
+
+        int IComparable.CompareTo(object obj)
+        {
+            if (obj is IBAN iban)
+                return CompareTo(iban);
+
+            throw new ArgumentException($"cannot compare {nameof(IBAN)} to {obj.GetType().FullName}");
         }
 
         /// <inheritdoc />

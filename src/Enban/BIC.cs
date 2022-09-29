@@ -7,7 +7,7 @@ namespace Enban
     /// <summary>
     /// A <em>Business Identifier Code</em> according to <a href="https://en.wikipedia.org/wiki/ISO_9362">ISO 9362</a>.
     /// </summary>
-    public class BIC : IFormattable, IEquatable<BIC>
+    public class BIC : IFormattable, IEquatable<BIC>, IComparable<BIC>, IComparable
     {
         /// <summary>
         /// The institution/bank code
@@ -116,7 +116,38 @@ namespace Enban
             parsed = null;
             return false;
         }
-        
+
+        public int CompareTo(BIC other)
+        {
+            int cmp;
+            
+            cmp = string.Compare(InstitutionCode, other.InstitutionCode, StringComparison.Ordinal);
+            if (cmp != 0)
+                return cmp;
+            
+            cmp = string.Compare(CountryCode, other.CountryCode, StringComparison.Ordinal);
+            if (cmp != 0)
+                return cmp;
+            
+            cmp = String.Compare(LocationCode, other.LocationCode, StringComparison.Ordinal);
+            if (cmp != 0)
+                return cmp;
+            
+            cmp = string.Compare(BranchCode, other.BranchCode, StringComparison.Ordinal);
+            if (cmp != 0)
+                return cmp;
+
+            return 0;
+        }
+
+        int IComparable.CompareTo(object obj)
+        {
+            if (obj is BIC bic)
+                return CompareTo(bic);
+
+            throw new ArgumentException($"cannot compare {nameof(BIC)} to {obj.GetType().FullName}");
+        }
+
         /// <inheritdoc />
         public override bool Equals(object obj)
         {
@@ -129,6 +160,19 @@ namespace Enban
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return InstitutionCode == other.InstitutionCode && CountryCode == other.CountryCode && LocationCode == other.LocationCode && BranchCode == other.BranchCode;
+        }
+
+        public static bool operator ==(BIC x, BIC y)
+        {
+            if (ReferenceEquals(x, y)) return true;
+            if (ReferenceEquals(x, null)) return false;
+            if (ReferenceEquals(y, null)) return false;
+            return x.Equals(y);
+        }
+
+        public static bool operator !=(BIC x, BIC y)
+        {
+            return !(x == y);
         }
 
         /// <inheritdoc />
