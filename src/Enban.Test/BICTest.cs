@@ -51,6 +51,18 @@ namespace Enban.Test
             Assert.Equal(branchCode, bic.BranchCode);
         }
         
+        [Fact]
+        public void Deconstruct()
+        {
+            var iban = new BIC("DRESDEFFXXX");
+            var (institutionCode, countryCode, locationCode, branchCode) = iban;
+            
+            Assert.Equal("DRES", institutionCode);
+            Assert.Equal("DE", countryCode);
+            Assert.Equal("FF", locationCode);
+            Assert.Equal("XXX", branchCode);
+        }
+        
         public static IEnumerable<object[]> ValidBics()
         {
             return new List<object[]>

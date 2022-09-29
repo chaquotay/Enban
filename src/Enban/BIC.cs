@@ -174,6 +174,14 @@ namespace Enban
         {
             return !(x == y);
         }
+        
+        public void Deconstruct(out string institutionCode, out string countryCode, out string locationCode, out string branchCode)
+        {
+            institutionCode = InstitutionCode;
+            countryCode = CountryCode;
+            locationCode = LocationCode;
+            branchCode = BranchCode;
+        }
 
         /// <inheritdoc />
         public override int GetHashCode()

@@ -195,6 +195,13 @@ namespace Enban
             throw new ArgumentException($"cannot compare {nameof(IBAN)} to {obj.GetType().FullName}");
         }
 
+        public void Deconstruct(out string countryCode, out int checkDigit, out string accountNumber)
+        {
+            countryCode = CountryCode;
+            checkDigit = CheckDigit;
+            accountNumber = AccountNumber;
+        }
+
         /// <inheritdoc />
         public override bool Equals(object obj)
         {

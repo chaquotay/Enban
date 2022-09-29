@@ -93,5 +93,16 @@ namespace Enban.Test
             Assert.True(parsed);
             Assert.True(iban.CheckDigitValid);
         }
+
+        [Fact]
+        public void Deconstruct()
+        {
+            var iban = new IBAN("DE68210501700012345678");
+            var (countryCode, checkDigit, accountNumber) = iban;
+            
+            Assert.Equal("DE", countryCode);
+            Assert.Equal(68, checkDigit);
+            Assert.Equal("210501700012345678", accountNumber);
+        }
     }
 }
