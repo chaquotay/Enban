@@ -54,6 +54,8 @@ namespace Enban.Text
         {
             return new(BICStyles.Full, "f", isKnownCountryCode);
         }
+
+        internal static BICPattern Lenient { get; } = new(BICStyles.Lenient, "f", null);
         
         private static Predicate<string> ToKnownCountryPredicate(IEnumerable<string> allowedCountryCodes)
         {

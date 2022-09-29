@@ -1,6 +1,10 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 using Enban.Text;
 
 namespace Enban
@@ -8,6 +12,7 @@ namespace Enban
     /// <summary>
     /// International Bank Account Number (or short: IBAN).
     /// </summary>
+    [TypeConverter(typeof(IBANTypeConverter))]
     public class IBAN : IFormattable, IEquatable<IBAN>, IComparable<IBAN>, IComparable
     {
         /// <summary>
