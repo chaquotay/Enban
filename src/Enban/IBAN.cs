@@ -2,18 +2,15 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
 using Enban.Text;
 
 namespace Enban
 {
     /// <summary>
-    /// International Bank Account Number (or short: IBAN).
+    /// An <em>International Bank Account Number</em>, or short: <em>IBAN</em> (see <a href="https://en.wikipedia.org/wiki/ISO_13616">ISO 13616</a>).
     /// </summary>
     [TypeConverter(typeof(IBANTypeConverter))]
-    public class IBAN : IFormattable, IEquatable<IBAN>, IComparable<IBAN>, IComparable
+    public sealed class IBAN : IFormattable, IEquatable<IBAN>, IComparable<IBAN>, IComparable
     {
         /// <summary>
         /// The check digit of the IBAN. The check digit might be wrong, e.g. if it was constructed by

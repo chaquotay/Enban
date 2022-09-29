@@ -1,18 +1,15 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Xml;
-using System.Xml.Schema;
-using System.Xml.Serialization;
 using Enban.Text;
 
 namespace Enban
 {
     /// <summary>
-    /// A <em>Business Identifier Code</em> according to <a href="https://en.wikipedia.org/wiki/ISO_9362">ISO 9362</a>.
+    /// A <em>Business Identifier Code</em>, or short: <em>BIC</em> (see <a href="https://en.wikipedia.org/wiki/ISO_9362">ISO 9362</a>).
     /// </summary>
     [TypeConverter(typeof(BICTypeConverter))]
-    public class BIC : IFormattable, IEquatable<BIC>, IComparable<BIC>, IComparable
+    public sealed class BIC : IFormattable, IEquatable<BIC>, IComparable<BIC>, IComparable
     {
         /// <summary>
         /// The institution/bank code
