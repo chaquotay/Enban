@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using Enban.Text;
 using Xunit;
@@ -103,6 +104,26 @@ namespace Enban.Test
             Assert.Equal("DE", countryCode);
             Assert.Equal(68, checkDigit);
             Assert.Equal("210501700012345678", accountNumber);
+        }
+        
+        [Fact]
+        public void ConvertFromString()
+        {
+            var converter = TypeDescriptor.GetConverter(typeof(IBAN));
+            
+            Assert.True(converter.CanConvertFrom(typeof(string)));
+            var converted = converter.ConvertFrom("DE68210501700012345678");
+            Assert.Equal(new IBAN("DE68210501700012345678"), converted);
+        }
+        
+        [Fact]
+        public void ConvertToString()
+        {
+            var converter = TypeDescriptor.GetConverter(typeof(IBAN));
+            
+            Assert.True(converter.CanConvertTo(typeof(string)));
+            var converted = converter.ConvertTo(new IBAN("DE68210501700012345678"), typeof(string));
+            Assert.Equal("DE68210501700012345678", converted);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Xunit;
 
@@ -61,6 +62,26 @@ namespace Enban.Test
             Assert.Equal("DE", countryCode);
             Assert.Equal("FF", locationCode);
             Assert.Equal("XXX", branchCode);
+        }
+
+        [Fact]
+        public void ConvertFromString()
+        {
+            var converter = TypeDescriptor.GetConverter(typeof(BIC));
+            
+            Assert.True(converter.CanConvertFrom(typeof(string)));
+            var converted = converter.ConvertFrom("DRESDEFFXXX");
+            Assert.Equal(new BIC("DRESDEFFXXX"), converted);
+        }
+        
+        [Fact]
+        public void ConvertToString()
+        {
+            var converter = TypeDescriptor.GetConverter(typeof(BIC));
+            
+            Assert.True(converter.CanConvertTo(typeof(string)));
+            var converted = converter.ConvertTo(new BIC("DRESDEFFXXX"), typeof(string));
+            Assert.Equal("DRESDEFFXXX", converted);
         }
         
         public static IEnumerable<object[]> ValidBics()
