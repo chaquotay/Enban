@@ -31,12 +31,15 @@ namespace Enban
         /// </summary>
         public string BranchCode { get; }
         
-        internal BIC(string institutionCode, string countryCode, string locationCode, string branchCode)
+        internal bool ConstructedWithoutBranchCode { get; }
+        
+        internal BIC(string institutionCode, string countryCode, string locationCode, string? branchCode)
         {
             InstitutionCode = institutionCode;
             CountryCode = countryCode;
             LocationCode = locationCode;
-            BranchCode = branchCode;
+            BranchCode = branchCode ?? "XXX";
+            ConstructedWithoutBranchCode = branchCode == null;
         }
 
         /// <summary>
@@ -53,7 +56,8 @@ namespace Enban
                 InstitutionCode = ic;
                 CountryCode = cc;
                 LocationCode = lc;
-                BranchCode = bc;
+                BranchCode = bc ?? "XXX";
+                ConstructedWithoutBranchCode = bc == null;
             }
             else
             {
@@ -67,7 +71,7 @@ namespace Enban
         /// <returns>the formatted BIC</returns>
         public override string ToString()
         {
-            return ToString("c", null);
+            return ToString("o", null);
         }
         
         /// <summary>

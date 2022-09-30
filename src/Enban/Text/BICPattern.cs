@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -13,6 +14,14 @@ namespace Enban.Text
         private readonly string _format;
         private readonly Predicate<string> _isKnownCountryCode;
 
+        private static readonly Dictionary<string, Func<BIC, string>> Formatters = new()
+        {
+            { "f", FormatFull },
+            { "c", FormatCompact },
+            { "G", FormatCompact }, // TODO: remove?
+            { "o", FormatOriginal },
+        };
+
         private BICPattern(BICStyles styles = BICStyles.Lenient, string format="c", Predicate<string>? isKnownCountryCode = null)
         {
             _styles = styles;
@@ -25,24 +34,27 @@ namespace Enban.Text
 
         internal static string Format(BIC value, string? format)
         {
-            if (!"f".Equals(format) && !string.IsNullOrEmpty(format) && !"G".Equals(format) && !"c".Equals(format))
-            {
+            if(!Formatters.TryGetValue(format ?? "c", out var formatter))
                 throw new ArgumentException($"invalid format: {format}", nameof(format));
-            }
-            
-            string formatted;
 
-            var addPrimaryBranchCode = "f".Equals(format);
-            if (addPrimaryBranchCode || !"XXX".Equals(value.BranchCode))
-            {
-                formatted = $"{value.InstitutionCode}{value.CountryCode}{value.LocationCode}{value.BranchCode}";
-            }
-            else
-            {
-                formatted = $"{value.InstitutionCode}{value.CountryCode}{value.LocationCode}";
-            }
-
-            return formatted;
+            return formatter.Invoke(value);
+        }
+        
+        private static string FormatFull(BIC value)
+        {
+            return $"{value.InstitutionCode}{value.CountryCode}{value.LocationCode}{value.BranchCode}";
+        }
+        
+        private static string FormatCompact(BIC value)
+        {
+            var compactedBranchCode = "XXX".Equals(value.BranchCode) ? "": value.BranchCode;
+            return $"{value.InstitutionCode}{value.CountryCode}{value.LocationCode}{compactedBranchCode}";
+        }
+        
+        private static string FormatOriginal(BIC value)
+        {
+            var originalBranchCode = value.ConstructedWithoutBranchCode ? "": value.BranchCode;
+            return $"{value.InstitutionCode}{value.CountryCode}{value.LocationCode}{originalBranchCode}";
         }
 
         /// <inheritdoc />
@@ -61,14 +73,14 @@ namespace Enban.Text
         }
         
         /// <returns>the parse format error or <c>null</c> if no error was found</returns>
-        internal static bool ParseAndValidate(string text, BICStyles style, Predicate<string> isKnownCountryCode, out string institutionCode, out string countryCode, out string locationCode, out string branchCode, [NotNullWhen(false)] out string? error)
+        internal static bool ParseAndValidate(string text, BICStyles style, Predicate<string> isKnownCountryCode, out string institutionCode, out string countryCode, out string locationCode, out string? branchCode, [NotNullWhen(false)] out string? error)
         {
             text = Normalize(text, style);
             
             institutionCode = "";
             countryCode = "";
             locationCode = "";
-            branchCode = "";
+            branchCode = null;
 
             if (string.IsNullOrWhiteSpace(text))
             {
@@ -87,7 +99,7 @@ namespace Enban.Text
             locationCode = text.Substring(6, 2);
             if (text.Length == 8)
             {
-                branchCode = "XXX";
+                branchCode = null;
 
                 if (style.HasFlagFast(BICStyles.RequirePrimaryOfficeBranchCode))
                 {
@@ -110,7 +122,7 @@ namespace Enban.Text
                 branchCode = text.Substring(8, 3);
             }
 
-            error = Validate(isKnownCountryCode, institutionCode, countryCode, locationCode, branchCode);
+            error = Validate(isKnownCountryCode, institutionCode, countryCode, locationCode, branchCode ?? "XXX");
 
             if (error == null)
                 return true;
@@ -118,7 +130,7 @@ namespace Enban.Text
             institutionCode = "";
             countryCode = "";
             locationCode = "";
-            branchCode = "";
+            branchCode = null;
             
             return false;
         }

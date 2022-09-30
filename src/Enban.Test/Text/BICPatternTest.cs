@@ -6,18 +6,21 @@ namespace Enban.Test.Text
     public class BICPatternTest
     {
         [Theory]
-        [InlineData("DRESDEFF370", BICStyles.Compact, "DRESDEFF370")]
-        [InlineData("DRESDEFF", BICStyles.Compact, "DRESDEFF")]
-        [InlineData("DRESDEFFXXX", BICStyles.Compact, "DRESDEFF")]
-        [InlineData("DRESDEFF370", BICStyles.Full, "DRESDEFF370")]
-        [InlineData("DRESDEFFXXX", BICStyles.Full, "DRESDEFFXXX")]
-        [InlineData("DRESDEFF", BICStyles.Full, "DRESDEFFXXX")]
-        public void Format(string bic, BICStyles fullPattern, string expectedText)
+        [InlineData("DRESDEFF370", "c", "DRESDEFF370")]
+        [InlineData("DRESDEFF", "c", "DRESDEFF")]
+        [InlineData("DRESDEFFXXX", "c", "DRESDEFF")]
+        [InlineData("DRESDEFF370", "f", "DRESDEFF370")]
+        [InlineData("DRESDEFFXXX", "f", "DRESDEFFXXX")]
+        [InlineData("DRESDEFF", "f", "DRESDEFFXXX")]
+        [InlineData("DRESDEFF370", "o", "DRESDEFF370")]
+        [InlineData("DRESDEFFXXX", "o", "DRESDEFFXXX")]
+        [InlineData("DRESDEFF", "o", "DRESDEFF")]
+        public void Format(string bic, string format, string expectedText)
         {
             var parsed = BIC.TryParse(bic, BICStyles.Lenient, out var value);
             
             Assert.True(parsed);
-            Assert.Equal(expectedText, (fullPattern==BICStyles.Full ? BICPattern.Full : BICPattern.Compact).Format(value));
+            Assert.Equal(expectedText, BICPattern.Format(value, format));
         }
         
         [Theory]
@@ -30,7 +33,7 @@ namespace Enban.Test.Text
             var parsed = (fullPattern ? BICPattern.Full : BICPattern.Compact).Parse(bic);
 
             Assert.True(parsed.Success);
-            Assert.Equal(expectedText, parsed.Value.ToString());
+            Assert.Equal(expectedText, parsed.Value.ToString("c", null));
         }
         
         [Theory]

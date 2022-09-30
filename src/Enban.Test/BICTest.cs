@@ -17,7 +17,7 @@ namespace Enban.Test
         {
             var parsed = BIC.TryParse(text, out var bic);
             Assert.True(parsed);
-            Assert.Equal(expecedString, bic.ToString());
+            Assert.Equal(expecedString, bic.ToString("c", null));
         }
         
         [Theory]

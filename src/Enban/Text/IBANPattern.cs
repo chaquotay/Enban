@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Enban.Text
@@ -11,6 +12,14 @@ namespace Enban.Text
         private readonly CountryAccountPatterns _countryAccountPatterns;
         private readonly IBANStyles _styles;
         private readonly string _format;
+        
+        private static readonly Dictionary<string, Func<IBAN, string>> Formatters = new()
+        {
+            { "e", FormatElectronic },
+            { "p", FormatPrint },
+            { "G", FormatElectronic }, // TODO: remove?
+        };
+
 
         private IBANPattern(IBANStyles styles = IBANStyles.Lenient, string format = "e", CountryAccountPatterns? countryAccountPatterns = null)
         {
@@ -27,13 +36,14 @@ namespace Enban.Text
         
         internal static string Format(IBAN value, string? format)
         {
-            if (!"e".Equals(format) && !string.IsNullOrEmpty(format) && !"G".Equals(format) && !"p".Equals(format))
-            {
+            if(!Formatters.TryGetValue(format ?? "e", out var formatter))
                 throw new ArgumentException($"invalid format: {format}", nameof(format));
-            }
 
-            var addWhiteSpace = "p".Equals(format);
-            
+            return formatter.Invoke(value);
+        }
+        
+        private static string FormatPrint(IBAN value)
+        {
             var accountNumber = value.AccountNumber;
             var countryCode = value.CountryCode;
             var checkDigit = value.CheckDigit;
@@ -49,50 +59,63 @@ namespace Enban.Text
 
             accountNumber.CopyTo(0, electronicChars, 4, accountNumber.Length);
 
-            if (addWhiteSpace)
+            var rest = electronicChars.Length % 4;
+            var fullSegmentCount = electronicChars.Length / 4;
+
+            var notLastSegmentCount = rest == 0 ? fullSegmentCount - 1 : fullSegmentCount;
+            var lastSegmentLength = rest == 0 ? 4 : rest;
+            var printLength = notLastSegmentCount * 5 + lastSegmentLength;
+            var printChars = new char[printLength];
+
+            var segmentIndex = 0;
+            while (segmentIndex < notLastSegmentCount)
             {
-                var rest = electronicChars.Length % 4;
-                var fullSegmentCount = electronicChars.Length / 4;
+                var electronicPosition = segmentIndex << 2;
+                var printPosition = electronicPosition + segmentIndex;
 
-                var notLastSegmentCount = rest == 0 ? fullSegmentCount - 1 : fullSegmentCount;
-                var lastSegmentLength = rest == 0 ? 4 : rest;
-                var printLength = notLastSegmentCount * 5 + lastSegmentLength;
-                var printChars = new char[printLength];
+                printChars[printPosition + 0] = electronicChars[electronicPosition + 0];
+                printChars[printPosition + 1] = electronicChars[electronicPosition + 1];
+                printChars[printPosition + 2] = electronicChars[electronicPosition + 2];
+                printChars[printPosition + 3] = electronicChars[electronicPosition + 3];
 
-                var segmentIndex = 0;
-                while (segmentIndex < notLastSegmentCount)
-                {
-                    var electronicPosition = segmentIndex << 2;
-                    var printPosition = electronicPosition + segmentIndex;
-
-                    printChars[printPosition + 0] = electronicChars[electronicPosition + 0];
-                    printChars[printPosition + 1] = electronicChars[electronicPosition + 1];
-                    printChars[printPosition + 2] = electronicChars[electronicPosition + 2];
-                    printChars[printPosition + 3] = electronicChars[electronicPosition + 3];
-
-                    var spacePosition = printPosition + 4;
-                    printChars[spacePosition] = ' ';
-                    segmentIndex++;
-                }
-
-                var lastElectronicPosition = segmentIndex << 2;
-                var lastPrintPosition = lastElectronicPosition + segmentIndex;
-
-                if (lastPrintPosition + 0 >= 0 && printChars.Length > lastPrintPosition + 0)
-                    printChars[lastPrintPosition + 0] = electronicChars[lastElectronicPosition + 0];
-                if (lastPrintPosition + 1 >= 0 && printChars.Length > lastPrintPosition + 1)
-                    printChars[lastPrintPosition + 1] = electronicChars[lastElectronicPosition + 1];
-                if (lastPrintPosition + 2 >= 0 && printChars.Length > lastPrintPosition + 2)
-                    printChars[lastPrintPosition + 2] = electronicChars[lastElectronicPosition + 2];
-                if (lastPrintPosition + 3 >= 0 && printChars.Length > lastPrintPosition + 3)
-                    printChars[lastPrintPosition + 3] = electronicChars[lastElectronicPosition + 3];
-
-                return new string(printChars);
+                var spacePosition = printPosition + 4;
+                printChars[spacePosition] = ' ';
+                segmentIndex++;
             }
-            else
-            {
-                return new string(electronicChars);
-            }
+
+            var lastElectronicPosition = segmentIndex << 2;
+            var lastPrintPosition = lastElectronicPosition + segmentIndex;
+
+            if (lastPrintPosition + 0 >= 0 && printChars.Length > lastPrintPosition + 0)
+                printChars[lastPrintPosition + 0] = electronicChars[lastElectronicPosition + 0];
+            if (lastPrintPosition + 1 >= 0 && printChars.Length > lastPrintPosition + 1)
+                printChars[lastPrintPosition + 1] = electronicChars[lastElectronicPosition + 1];
+            if (lastPrintPosition + 2 >= 0 && printChars.Length > lastPrintPosition + 2)
+                printChars[lastPrintPosition + 2] = electronicChars[lastElectronicPosition + 2];
+            if (lastPrintPosition + 3 >= 0 && printChars.Length > lastPrintPosition + 3)
+                printChars[lastPrintPosition + 3] = electronicChars[lastElectronicPosition + 3];
+
+            return new string(printChars);
+        }
+        
+        private static string FormatElectronic(IBAN value)
+        {
+            var accountNumber = value.AccountNumber;
+            var countryCode = value.CountryCode;
+            var checkDigit = value.CheckDigit;
+
+            var electronicChars = new char[accountNumber.Length + 4];
+            electronicChars[0] = countryCode[0];
+            electronicChars[1] = countryCode[1];
+
+            var lastCheckDigit = checkDigit % 10;
+            var firstCheckDigit = (checkDigit - lastCheckDigit) / 10;
+            electronicChars[2] = (char) ('0' + firstCheckDigit);
+            electronicChars[3] = (char) ('0' + lastCheckDigit);
+
+            accountNumber.CopyTo(0, electronicChars, 4, accountNumber.Length);
+
+            return new string(electronicChars);
         }
 
         /// <inheritdoc />
