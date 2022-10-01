@@ -104,7 +104,7 @@ namespace Enban
         /// <inheritdoc />
         public override string ToString()
         {
-            return ToString("G", CultureInfo.CurrentCulture);
+            return ToString("e", CultureInfo.CurrentCulture);
         }
 
         /// <summary>

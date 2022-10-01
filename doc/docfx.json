@@ -21,6 +21,7 @@
           "api/**.yml",
           "api/index.md",
           "index.md",
+          "text.md",
           "toc.yml"
         ]
       }

@@ -29,17 +29,20 @@ prints `BIC is: COBADEFF`
 
 Changes since 1.0.x:
 
-* Added [`BIC`](api/Enban.BIC.html) type for *Business Identifier Codes*
-* Removed `BBAN` type
+* Added [`BIC`](api/Enban.BIC.html) and [`BICPattern`](api/Enban.Text.BICPattern.html) types for *Business Identifier Codes*
+* Removed `BBAN` struct
+* Removed `Country` class
+* Removed `ICountryProvider` interface
+* Removed `CountryProviders` class
 * Changed [`IBAN`](api/Enban.IBAN.html) type from `struct` to `class`
 * Added type converters
-* C# 8 nullable reference type support
-* Deconstruct methods to support C# 7 deconstruction
+* Added C# 8 nullable reference type support
+* Added deconstruct methods to support C# 7 deconstruction
 * Changed target to .NET Standard 2.0
 
 ## 1.0.1
 
-* Improved null handling in empty default values of `IBAN` and `BBAN`
+* Fixed null handling in empty default values of `IBAN` and `BBAN`
 
 ## 1.0.0
 
