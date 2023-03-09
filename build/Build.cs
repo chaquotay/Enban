@@ -63,7 +63,7 @@ class Build : NukeBuild
         {
             DotNetTest(s => s
                 .SetResultsDirectory(TestResultsDirectory)
-                .SetLogger("xunit")
+                .SetLoggers("xunit")
                 .SetProjectFile(Solution.GetProject("Enban.Test")));
         });
 
